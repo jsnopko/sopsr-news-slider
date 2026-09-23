@@ -471,7 +471,7 @@ final class SOPSR_News_Slider_Render {
 		$control_bg = self::rgba( $settings['controls_bg_color'], (int) $settings['controls_bg_opacity'] / 100 );
 
 		$css[] = sprintf(
-			'%1$s{--sopsr-image-bg:%2$s;--sopsr-overlay:%3$s;--sopsr-title:%4$s;--sopsr-content-max:%5$dpx;--sopsr-pad-x:%6$dpx;--sopsr-pad-y:%7$dpx;--sopsr-cta-text:%8$s;--sopsr-cta-bg:%9$s;--sopsr-cta-hover-text:%10$s;--sopsr-cta-hover-bg:%11$s;--sopsr-cta-border:%12$s;--sopsr-cta-border-width:%13$dpx;--sopsr-cta-radius:%14$dpx;--sopsr-cta-font:%15$dpx;--sopsr-cta-weight:%16$s;--sopsr-cta-py:%17$dpx;--sopsr-cta-px:%18$dpx;--sopsr-control-color:%19$s;--sopsr-control-bg:%20$s;--sopsr-control-size:%21$dpx;--sopsr-page-active:%22$s;--sopsr-page:%23$s;--sopsr-focus:%24$s;}',
+			'%1$s{--sopsr-image-bg:%2$s;--sopsr-overlay:%3$s;--sopsr-title:%4$s;--sopsr-content-max:%5$dpx;--sopsr-pad-x:%6$dpx;--sopsr-pad-y:%7$dpx;--sopsr-cta-text:%8$s;--sopsr-cta-bg:%9$s;--sopsr-cta-hover-text:%10$s;--sopsr-cta-hover-bg:%11$s;--sopsr-cta-border:%12$s;--sopsr-cta-border-width:%13$dpx;--sopsr-cta-radius:%14$dpx;--sopsr-cta-font:%15$s;--sopsr-cta-weight:%16$s;--sopsr-cta-py:%17$dpx;--sopsr-cta-px:%18$dpx;--sopsr-control-color:%19$s;--sopsr-control-bg:%20$s;--sopsr-control-size:%21$dpx;--sopsr-page-active:%22$s;--sopsr-page:%23$s;--sopsr-focus:%24$s;}',
 			$selector,
 			$settings['image_background_color'],
 			$overlay,
@@ -486,7 +486,7 @@ final class SOPSR_News_Slider_Render {
 			$settings['cta_border_color'],
 			(int) $settings['cta_border_width'],
 			(int) $settings['cta_border_radius'],
-			(int) $settings['cta_font_size'],
+			self::font_size( $settings, 'cta_font_size' ),
 			$settings['cta_font_weight'],
 			(int) $settings['cta_padding_y'],
 			(int) $settings['cta_padding_x'],
@@ -508,9 +508,10 @@ final class SOPSR_News_Slider_Render {
 			'left' === $settings['content_halign'] ? 'auto' : ( 'center' === $settings['content_halign'] ? 'auto' : '0' )
 		);
 
-		$title_size = 'clamp(' . (int) $settings['title_clamp_min'] . 'px,' . (float) $settings['title_clamp_fluid'] . 'vw,' . (int) $settings['title_clamp_max'] . 'px)';
+		$css[] = $selector . '{--sopsr-cta-focus-text:' . ( $settings['cta_focus_text_color'] ?? $settings['cta_text_color'] ) . ';--sopsr-cta-focus-bg:' . ( $settings['cta_focus_bg_color'] ?? $settings['cta_bg_color'] ) . ';}';
+		$title_size = 'clamp(' . self::font_size( $settings, 'title_clamp_min' ) . ',' . self::css_number( $settings['title_clamp_fluid'], 'vw' ) . ',' . self::font_size( $settings, 'title_clamp_max' ) . ')';
 		if ( 'responsive' === $settings['title_font_mode'] ) {
-			$title_size = (int) $settings['title_desktop'] . 'px';
+			$title_size = self::font_size( $settings, 'title_desktop' );
 		}
 
 		$css[] = sprintf(
@@ -534,8 +535,8 @@ final class SOPSR_News_Slider_Render {
 		$css           = array_merge( $css, $mobile_rules );
 
 		if ( 'responsive' === $settings['title_font_mode'] ) {
-			$css[] = '@media (max-width:' . (int) $settings['tablet_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . (int) $settings['title_tablet'] . 'px;}}';
-			$css[] = '@media (max-width:' . (int) $settings['mobile_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . (int) $settings['title_mobile'] . 'px;}}';
+			$css[] = '@media (max-width:' . (int) $settings['tablet_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . self::font_size( $settings, 'title_tablet' ) . ';}}';
+			$css[] = '@media (max-width:' . (int) $settings['mobile_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . self::font_size( $settings, 'title_mobile' ) . ';}}';
 		}
 
 		if ( ! empty( $settings['custom_css'] ) ) {
@@ -639,6 +640,12 @@ final class SOPSR_News_Slider_Render {
 			return 'end';
 		}
 		return 'center';
+	}
+
+	private static function font_size( array $settings, string $key ): string {
+		$unit = $settings[ $key . '_unit' ] ?? 'px';
+		$unit = in_array( $unit, array( 'px', 'rem', 'em' ), true ) ? $unit : 'px';
+		return self::css_number( $settings[ $key ], $unit );
 	}
 
 	private static function css_number( $value, string $unit ): string {

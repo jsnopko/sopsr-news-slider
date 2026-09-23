@@ -1,6 +1,6 @@
 # ŠOP SR News Slider – návrh a základná dokumentácia
 
-**Stav:** implementovaný test build 0.1.1  
+**Stav:** implementovaný test build 0.1.2
 **Projekt:** www.sopsr.sk / WordPress + Kadence + Polylang  
 **Knižnica:** Splide.js 4.1.4; plugin podporuje bundled/local cache a CDN fallback  
 **Licencia Splide:** MIT  
@@ -507,3 +507,14 @@ Test build používa jsDelivr ako fallback, ak Splide nie je pribalený alebo lo
 ## Implementačná poznámka pre verziu 0.1.1
 
 Keyboard focus order bol upravený tak, aby autoplay toggle a Prev/Next šípky boli v DOM pred `splide__track`. CTA zostáva semantický odkaz `<a>`. Pri zmene slidu pomocou Next/Previous zostáva focus na ovládacom prvku a ďalší Tab smeruje na focusovateľný obsah aktuálneho slidu. Debug režim zaznamenáva `focusin` udalosti do konzoly.
+
+
+## Implementačná poznámka pre verziu 0.1.2
+
+Nadpis (Desktop/Tablet/Mobile aj clamp min/max) a CTA majú číselnú veľkosť s jednotkou px/rem/em. Chýbajúca jednotka je px; clamp fluid zostáva vw. Jednotky sú striktne validované, hodnoty podporujú desatinné čísla. Dátum a excerpt nemajú nastaviteľnú veľkosť písma.
+
+CTA má samostatné farby textu a pozadia pre :focus aj :focus-visible; focus má prednosť pred hover a zachováva outline. Staršie nastavenia preberajú normálne CTA farby bez zápisu do databázy pri načítaní.
+
+Live Preview obsahuje ďalšie Uložiť zmeny v tom istom formulári, dekoratívne šípky a päť bodiek so spoločným frontend CSS. Šípky a pagination nemajú Tab stop. CTA je dostupné klávesnicou na kontrolu focus farieb. Viditeľnosť šípok/bodiek aj veľkosť ovládania sú globálne; bodky majú existujúcu pevnú veľkosť a odstup. Náhľad používa reprezentatívne šírky 1100/720/375px a približné rozmery prispôsobené panelu.
+
+Sekcie zachovávajú natívne details/summary, reset a získavajú otočnú šípku aj viditeľný focus. Frontendové DOM poradie a klávesnicové správanie 0.1.1 zostávajú zachované.

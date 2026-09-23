@@ -33,10 +33,11 @@ final class SOPSR_News_Slider_Admin {
 
 		wp_enqueue_media();
 		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_style( 'sopsr-news-slider-preview', SOPSR_NS_URL . 'assets/css/frontend.css', array(), SOPSR_NS_VERSION );
 		wp_enqueue_style(
 			'sopsr-news-slider-admin',
 			SOPSR_NS_URL . 'assets/css/admin.css',
-			array( 'wp-color-picker' ),
+			array( 'wp-color-picker', 'sopsr-news-slider-preview' ),
 			SOPSR_NS_VERSION
 		);
 
@@ -147,14 +148,14 @@ final class SOPSR_News_Slider_Admin {
 							<?php self::color( 'title_color', 'Farba nadpisu', $s['title_color'], $d['title_color'] ); ?>
 							<?php self::select( 'title_font_mode', 'Veľkosť nadpisu', $s['title_font_mode'], $d['title_font_mode'], array( 'clamp' => 'CSS clamp()', 'responsive' => 'Samostatná veľkosť Desktop/Tablet/Mobile' ) ); ?>
 							<div class="sopsr-inline-fields">
-								<?php self::number_compact( 'title_clamp_min', 'Clamp min', $s['title_clamp_min'], $d['title_clamp_min'], 10, 100, 1, 'px' ); ?>
+								<?php self::font_size( 'title_clamp_min', 'Clamp min', $s, $d ); ?>
 								<?php self::number_compact( 'title_clamp_fluid', 'Clamp fluid', $s['title_clamp_fluid'], $d['title_clamp_fluid'], 0.1, 20, 0.1, 'vw' ); ?>
-								<?php self::number_compact( 'title_clamp_max', 'Clamp max', $s['title_clamp_max'], $d['title_clamp_max'], 10, 140, 1, 'px' ); ?>
+								<?php self::font_size( 'title_clamp_max', 'Clamp max', $s, $d ); ?>
 							</div>
 							<div class="sopsr-inline-fields">
-								<?php self::number_compact( 'title_desktop', 'Desktop', $s['title_desktop'], $d['title_desktop'], 10, 140, 1, 'px' ); ?>
-								<?php self::number_compact( 'title_tablet', 'Tablet', $s['title_tablet'], $d['title_tablet'], 10, 120, 1, 'px' ); ?>
-								<?php self::number_compact( 'title_mobile', 'Mobile', $s['title_mobile'], $d['title_mobile'], 10, 100, 1, 'px' ); ?>
+								<?php self::font_size( 'title_desktop', 'Desktop', $s, $d ); ?>
+								<?php self::font_size( 'title_tablet', 'Tablet', $s, $d ); ?>
+								<?php self::font_size( 'title_mobile', 'Mobile', $s, $d ); ?>
 							</div>
 							<?php self::select( 'title_weight', 'Font weight', (string) $s['title_weight'], (string) $d['title_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
 							<?php self::number( 'title_line_height', 'Line-height', $s['title_line_height'], $d['title_line_height'], 0.8, 2.5, 0.05 ); ?>
@@ -169,11 +170,13 @@ final class SOPSR_News_Slider_Admin {
 							<?php self::color( 'cta_bg_color', 'Pozadie', $s['cta_bg_color'], $d['cta_bg_color'] ); ?>
 							<?php self::color( 'cta_hover_text_color', 'Hover text', $s['cta_hover_text_color'], $d['cta_hover_text_color'] ); ?>
 							<?php self::color( 'cta_hover_bg_color', 'Hover pozadie', $s['cta_hover_bg_color'], $d['cta_hover_bg_color'] ); ?>
+							<?php self::color( 'cta_focus_text_color', 'Farba textu CTA pri focus', $s['cta_focus_text_color'], $d['cta_focus_text_color'] ); ?>
+							<?php self::color( 'cta_focus_bg_color', 'Pozadie CTA pri focus', $s['cta_focus_bg_color'], $d['cta_focus_bg_color'] ); ?>
 							<?php self::color( 'cta_border_color', 'Border', $s['cta_border_color'], $d['cta_border_color'] ); ?>
 							<div class="sopsr-inline-fields">
 								<?php self::number_compact( 'cta_border_width', 'Border', $s['cta_border_width'], $d['cta_border_width'], 0, 10, 1, 'px' ); ?>
 								<?php self::number_compact( 'cta_border_radius', 'Radius', $s['cta_border_radius'], $d['cta_border_radius'], 0, 100, 1, 'px' ); ?>
-								<?php self::number_compact( 'cta_font_size', 'Font', $s['cta_font_size'], $d['cta_font_size'], 10, 40, 1, 'px' ); ?>
+								<?php self::font_size( 'cta_font_size', 'Font', $s, $d ); ?>
 							</div>
 							<?php self::select( 'cta_font_weight', 'Font weight', (string) $s['cta_font_weight'], (string) $d['cta_font_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
 							<div class="sopsr-inline-fields">
@@ -279,6 +282,7 @@ final class SOPSR_News_Slider_Admin {
 						<div class="sopsr-preview-card">
 							<div class="sopsr-preview-card__head">
 								<strong>Live preview</strong>
+								<button type="submit" class="button button-primary">Uložiť zmeny</button>
 								<div class="sopsr-preview-devices" role="group" aria-label="Preview zariadenie">
 									<button type="button" class="button button-small is-active" data-preview-device="desktop">Desktop</button>
 									<button type="button" class="button button-small" data-preview-device="tablet">Tablet</button>
@@ -286,13 +290,18 @@ final class SOPSR_News_Slider_Admin {
 								</div>
 							</div>
 							<div class="sopsr-preview-stage" data-device="desktop">
-								<div class="sopsr-preview-slide" id="sopsr-slider-preview">
+								<div class="sopsr-preview-slide sopsr-news-slider" id="sopsr-slider-preview">
+									<div class="sopsr-news-slider__arrows" aria-hidden="true">
+										<span class="splide__arrow splide__arrow--prev"><svg viewBox="0 0 24 24" focusable="false"><path d="M15.5 4.5 8 12l7.5 7.5-1.4 1.4L5.2 12l8.9-8.9z"/></svg></span>
+										<span class="splide__arrow splide__arrow--next"><svg viewBox="0 0 24 24" focusable="false"><path d="m8.5 19.5 7.5-7.5-7.5-7.5 1.4-1.4 8.9 8.9-8.9 8.9z"/></svg></span>
+									</div>
+									<div class="splide__pagination" aria-hidden="true"><span class="splide__pagination__page is-active"></span><span class="splide__pagination__page"></span><span class="splide__pagination__page"></span><span class="splide__pagination__page"></span><span class="splide__pagination__page"></span></div>
 									<img class="sopsr-preview-image" src="<?php echo esc_url( self::preview_image_url() ); ?>" alt="">
 									<div class="sopsr-preview-overlay"></div>
 									<div class="sopsr-preview-content">
 										<div class="sopsr-preview-inner">
-											<div class="sopsr-preview-title">Ukážkový názov aktuality ŠOP SR</div>
-											<a class="sopsr-preview-cta" href="#" tabindex="-1">Viac informácií</a>
+											<div class="sopsr-preview-title sopsr-news-slider__title">Ukážkový názov aktuality ŠOP SR</div>
+											<a class="sopsr-preview-cta sopsr-news-slider__cta" href="#">Viac informácií</a>
 										</div>
 									</div>
 								</div>
@@ -462,6 +471,17 @@ final class SOPSR_News_Slider_Admin {
 		self::row_open( $label, $id, $help );
 		printf( '<input type="number" id="%1$s" name="%2$s" value="%3$s" min="%4$s" max="%5$s" step="%6$s" data-default="%7$s">', esc_attr( $id ), esc_attr( self::field_name( $key ) ), esc_attr( (string) $value ), esc_attr( (string) $min ), esc_attr( (string) $max ), esc_attr( (string) $step ), esc_attr( (string) $default ) );
 		self::row_close();
+	}
+
+	private static function font_size( string $key, string $label, array $settings, array $defaults ): void {
+		echo '<div class="sopsr-font-field">';
+		self::number_compact( $key, $label, $settings[ $key ], $defaults[ $key ], 0.01, 140, 0.01, '' );
+		$unit_key = $key . '_unit';
+		echo '<label class="sopsr-compact-field"><span>' . esc_html( $label . ' – jednotka' ) . '</span><select id="sopsr-' . esc_attr( $unit_key ) . '" name="' . esc_attr( self::field_name( $unit_key ) ) . '" data-default="px">';
+		foreach ( array( 'px', 'rem', 'em' ) as $unit ) {
+			echo '<option value="' . esc_attr( $unit ) . '" ' . selected( $settings[ $unit_key ] ?? 'px', $unit, false ) . '>' . esc_html( $unit ) . '</option>';
+		}
+		echo '</select></label></div>';
 	}
 
 	private static function number_compact( string $key, string $label, $value, $default, $min, $max, $step, string $suffix ): void {

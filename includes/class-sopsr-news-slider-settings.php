@@ -109,11 +109,16 @@ final class SOPSR_News_Slider_Settings {
 			'title_color'             => '#ffffff',
 			'title_font_mode'         => 'clamp',
 			'title_clamp_min'         => 26,
+			'title_clamp_min_unit'    => 'px',
 			'title_clamp_fluid'       => 3.1,
 			'title_clamp_max'         => 52,
+			'title_clamp_max_unit'    => 'px',
 			'title_desktop'           => 48,
+			'title_desktop_unit'      => 'px',
 			'title_tablet'            => 40,
+			'title_tablet_unit'       => 'px',
 			'title_mobile'            => 30,
+			'title_mobile_unit'       => 'px',
 			'title_weight'            => 700,
 			'title_line_height'       => 1.15,
 			'title_max_width'         => 900,
@@ -123,10 +128,13 @@ final class SOPSR_News_Slider_Settings {
 			'cta_bg_color'            => '#2f6f3e',
 			'cta_hover_text_color'    => '#ffffff',
 			'cta_hover_bg_color'      => '#245831',
+			'cta_focus_text_color'    => '#ffffff',
+			'cta_focus_bg_color'      => '#2f6f3e',
 			'cta_border_color'        => '#2f6f3e',
 			'cta_border_width'        => 1,
 			'cta_border_radius'       => 4,
 			'cta_font_size'           => 16,
+			'cta_font_size_unit'      => 'px',
 			'cta_font_weight'         => 600,
 			'cta_padding_y'           => 12,
 			'cta_padding_x'           => 22,
@@ -275,7 +283,16 @@ final class SOPSR_News_Slider_Settings {
 
 	public static function get_all(): array {
 		$saved = get_option( self::OPTION_NAME, array() );
-		return self::merge_recursive( self::defaults(), is_array( $saved ) ? $saved : array() );
+		$saved = is_array( $saved ) ? $saved : array();
+		$settings = self::merge_recursive( self::defaults(), $saved );
+		// Preserve each installation's normal CTA palette until focus colors are saved.
+		foreach ( array( 'text', 'bg' ) as $part ) {
+			$key = 'cta_focus_' . $part . '_color';
+			if ( ! isset( $saved[ $key ] ) ) {
+				$settings[ $key ] = $settings[ 'cta_' . $part . '_color' ];
+			}
+		}
+		return $settings;
 	}
 
 	public static function get( string $key, $default = null ) {
@@ -406,6 +423,8 @@ final class SOPSR_News_Slider_Settings {
 			'cta_bg_color',
 			'cta_hover_text_color',
 			'cta_hover_bg_color',
+			'cta_focus_text_color',
+			'cta_focus_bg_color',
 			'cta_border_color',
 			'controls_color',
 			'controls_bg_color',
@@ -420,13 +439,19 @@ final class SOPSR_News_Slider_Settings {
 		$out['overlay_opacity']     = self::int_range( $input, 'overlay_opacity', 0, 100, $defaults['overlay_opacity'] );
 		$out['controls_bg_opacity'] = self::int_range( $input, 'controls_bg_opacity', 0, 100, $defaults['controls_bg_opacity'] );
 
+		foreach ( array( 'title_clamp_min', 'title_clamp_max', 'title_desktop', 'title_tablet', 'title_mobile', 'cta_font_size' ) as $key ) {
+			$out[ $key . '_unit' ] = self::enum( $input, $key . '_unit', array( 'px', 'rem', 'em' ), 'px' );
+			$out[ $key ] = self::float_range_input( $input, $key, 0.01, 140, $defaults[ $key ] );
+		}
+		foreach ( array( 'text', 'bg' ) as $part ) {
+			$key = 'cta_focus_' . $part . '_color';
+			if ( ! isset( $input[ $key ] ) ) {
+				$out[ $key ] = $out[ 'cta_' . $part . '_color' ];
+			}
+		}
+
 		$out['title_font_mode']   = self::enum( $input, 'title_font_mode', array( 'clamp', 'responsive' ), $defaults['title_font_mode'] );
-		$out['title_clamp_min']   = self::int_range( $input, 'title_clamp_min', 10, 100, $defaults['title_clamp_min'] );
 		$out['title_clamp_fluid'] = self::float_range_input( $input, 'title_clamp_fluid', 0.1, 20, $defaults['title_clamp_fluid'] );
-		$out['title_clamp_max']   = self::int_range( $input, 'title_clamp_max', 10, 140, $defaults['title_clamp_max'] );
-		$out['title_desktop']     = self::int_range( $input, 'title_desktop', 10, 140, $defaults['title_desktop'] );
-		$out['title_tablet']      = self::int_range( $input, 'title_tablet', 10, 120, $defaults['title_tablet'] );
-		$out['title_mobile']      = self::int_range( $input, 'title_mobile', 10, 100, $defaults['title_mobile'] );
 		$out['title_weight']      = self::enum( $input, 'title_weight', array( '300', '400', '500', '600', '700', '800', '900' ), (string) $defaults['title_weight'] );
 		$out['title_line_height'] = self::float_range_input( $input, 'title_line_height', 0.8, 2.5, $defaults['title_line_height'] );
 		$out['title_max_width']   = self::int_range( $input, 'title_max_width', 200, 2000, $defaults['title_max_width'] );
@@ -434,7 +459,6 @@ final class SOPSR_News_Slider_Settings {
 		foreach ( array(
 			'cta_border_width'  => array( 0, 10 ),
 			'cta_border_radius' => array( 0, 100 ),
-			'cta_font_size'     => array( 10, 40 ),
 			'cta_padding_y'     => array( 0, 60 ),
 			'cta_padding_x'     => array( 0, 100 ),
 			'speed'             => array( 0, 10000 ),

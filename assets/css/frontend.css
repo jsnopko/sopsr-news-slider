@@ -147,6 +147,12 @@
 	color: var(--sopsr-cta-hover-text);
 }
 
+.sopsr-news-slider__cta:focus,
+.sopsr-news-slider__cta:focus-visible {
+	background: var(--sopsr-cta-focus-bg, var(--sopsr-cta-bg));
+	color: var(--sopsr-cta-focus-text, var(--sopsr-cta-text));
+}
+
 .sopsr-news-slider a:focus-visible,
 .sopsr-news-slider button:focus-visible {
 	outline: 3px solid var(--sopsr-focus);

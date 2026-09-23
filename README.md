@@ -127,9 +127,12 @@ The settings page contains a lightweight live preview with Desktop / Tablet / Mo
 - object-fit / object-position,
 - overlay and gradient,
 - title size / color / weight / line-height,
-- CTA styling,
+- CTA normal / hover / focus styling,
+- navigation arrows and pagination colors,
 - content alignment,
 - custom CSS using `{{slider}}`.
+
+The preview uses representative Desktop (1100px), Tablet (720px) and Mobile (375px) widths for fluid typography and approximates dimensions to fit the sidebar. Arrow/pagination visibility and control size are global settings; dot size and spacing are fixed frontend styles. Date/excerpt font sizes are not configurable.
 
 The preview is not a full Splide instance. The public frontend uses real Splide.
 
@@ -182,6 +185,19 @@ docs/
 ```
 
 ## Version
+
+Developer checks (no additional dependencies): `php tests/regression.php` and `node tests/preview.cjs`.
+These cover settings/CSS generation and preview updates; browser and WordPress integration still require the keyboard/manual checks above.
+
+### 0.1.2
+
+- Added “Uložiť zmeny” in the sticky Live Preview card, submitting the existing settings form.
+- Added CTA focus text/background color pickers; focus overrides hover and keeps the visible focus ring. Older settings inherit their normal CTA colors until saved.
+- Added px/rem/em selectors and decimal values for CTA font size, responsive title sizes and clamp minimum/maximum; missing units remain px and the fluid value remains vw.
+- Added rotating accordion chevrons and visible keyboard focus; section resets retain their existing behavior.
+- Live Preview now shows decorative navigation arrows and pagination dots using frontend CSS, including configured icon/background/opacity/size and active/inactive dot colors.
+- Desktop/Tablet/Mobile preview updates typography and controls immediately; the preview CTA can receive keyboard focus to test its colors.
+- Preserved the 0.1.1 frontend keyboard focus order, semantic CTA links and Splide accessibility behavior.
 
 ### 0.1.1
 
