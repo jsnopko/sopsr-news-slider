@@ -1,0 +1,7 @@
+- plugin root must stay sopsr-news-slider/
+- before finishing run PHP syntax checks
+- run JS syntax checks
+- increment plugin version
+- update README/changelog
+- create sopsr-news-slider-X.Y.Z.zip in /dist
+- never include .git, node_modules, temp files
