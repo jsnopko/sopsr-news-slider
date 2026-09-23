@@ -189,6 +189,12 @@ docs/
 Developer checks (no additional dependencies): `php tests/regression.php` and `node tests/preview.cjs`.
 These cover settings/CSS generation and preview updates; browser and WordPress integration still require the keyboard/manual checks above.
 
+### 0.1.3
+
+- The settings page remembers which accordion sections are open or closed in the current browser.
+- After saving from either Save button, the settings page returns to the previous scroll position and restores the accordion state.
+- On the first visit, before a browser state exists, only the first settings section is expanded.
+
 ### 0.1.2
 
 - Added “Uložiť zmeny” in the sticky Live Preview card, submitting the existing settings form.

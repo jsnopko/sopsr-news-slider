@@ -2,7 +2,7 @@
 /**
  * Plugin Name: ŠOP SR News Slider
  * Description: Accessible Splide-based news/hero slider for ŠOP SR with Polylang support, responsive design settings, live admin preview and debug logging.
- * Version: 0.1.2
+ * Version: 0.1.3
  * Requires at least: 6.0
  * Requires PHP: 8.1
  * Author: ŠOP SR
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SOPSR_NS_VERSION', '0.1.2' );
+define( 'SOPSR_NS_VERSION', '0.1.3' );
 define( 'SOPSR_NS_SPLIDE_VERSION', '4.1.4' );
 define( 'SOPSR_NS_FILE', __FILE__ );
 define( 'SOPSR_NS_DIR', plugin_dir_path( __FILE__ ) );

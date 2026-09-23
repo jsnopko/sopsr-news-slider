@@ -1,6 +1,6 @@
 # ŠOP SR News Slider – návrh a základná dokumentácia
 
-**Stav:** implementovaný test build 0.1.2
+**Stav:** implementovaný test build 0.1.3
 **Projekt:** www.sopsr.sk / WordPress + Kadence + Polylang  
 **Knižnica:** Splide.js 4.1.4; plugin podporuje bundled/local cache a CDN fallback  
 **Licencia Splide:** MIT  
@@ -518,3 +518,8 @@ CTA má samostatné farby textu a pozadia pre :focus aj :focus-visible; focus m�
 Live Preview obsahuje ďalšie Uložiť zmeny v tom istom formulári, dekoratívne šípky a päť bodiek so spoločným frontend CSS. Šípky a pagination nemajú Tab stop. CTA je dostupné klávesnicou na kontrolu focus farieb. Viditeľnosť šípok/bodiek aj veľkosť ovládania sú globálne; bodky majú existujúcu pevnú veľkosť a odstup. Náhľad používa reprezentatívne šírky 1100/720/375px a približné rozmery prispôsobené panelu.
 
 Sekcie zachovávajú natívne details/summary, reset a získavajú otočnú šípku aj viditeľný focus. Frontendové DOM poradie a klávesnicové správanie 0.1.1 zostávajú zachované.
+
+
+## Implementačná poznámka pre verziu 0.1.3
+
+Administrácia ukladá otvorený/zatvorený stav každej `details` sekcie do lokálneho úložiska prehliadača. Ak stav ešte neexistuje, otvorená je iba prvá sekcia. Pri odoslaní pôvodného settings formulára sa do session úložiska uloží aktuálna vertikálna pozícia a po návrate z WordPress `options.php` sa jednorazovo obnoví. Platí to pre obe tlačidlá na uloženie a nemení to nonce, capability kontrolu ani sanitizáciu nastavení.

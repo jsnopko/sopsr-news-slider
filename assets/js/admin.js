@@ -5,9 +5,95 @@
 	const form = document.getElementById('sopsr-slider-settings-form');
 	const preview = document.getElementById('sopsr-slider-preview');
 	const stage = document.querySelector('.sopsr-preview-stage');
+	const sections = Array.from(document.querySelectorAll('.sopsr-settings-section'));
+	const accordionStorageKey = 'sopsr-news-slider-accordion-state';
+	const scrollStorageKey = 'sopsr-news-slider-save-scroll';
 
 	if (!form) {
 		return;
+	}
+
+	function storageGet(storage, key) {
+		try {
+			return storage?.getItem(key) || '';
+		} catch (error) {
+			return '';
+		}
+	}
+
+	function browserStorage(name) {
+		try {
+			return window[name];
+		} catch (error) {
+			return null;
+		}
+	}
+
+	function storageSet(storage, key, value) {
+		try {
+			storage?.setItem(key, value);
+		} catch (error) {
+			// Storage may be disabled; the server-rendered default remains usable.
+		}
+	}
+
+	function saveAccordionState() {
+		const state = {};
+		sections.forEach(section => {
+			if (section.id) {
+				state[section.id] = section.open;
+			}
+		});
+		storageSet(browserStorage('localStorage'), accordionStorageKey, JSON.stringify(state));
+	}
+
+	function restoreAccordionState() {
+		const saved = storageGet(browserStorage('localStorage'), accordionStorageKey);
+		if (!saved) {
+			return;
+		}
+		try {
+			const state = JSON.parse(saved);
+			sections.forEach(section => {
+				if (section.id && Object.prototype.hasOwnProperty.call(state, section.id)) {
+					section.open = Boolean(state[section.id]);
+				}
+			});
+		} catch (error) {
+			// Ignore malformed browser storage and keep the default accordion state.
+		}
+	}
+
+	function restoreScrollAfterSave() {
+		const sessionStorage = browserStorage('sessionStorage');
+		const saved = storageGet(sessionStorage, scrollStorageKey);
+		if (!saved) {
+			return;
+		}
+		try {
+			sessionStorage?.removeItem(scrollStorageKey);
+		} catch (error) {
+			// The stored value is harmless if storage access is unavailable.
+		}
+		const scrollTop = Number.parseFloat(saved);
+		if (!Number.isFinite(scrollTop)) {
+			return;
+		}
+		window.requestAnimationFrame(() => {
+			window.requestAnimationFrame(() => window.scrollTo({ top: scrollTop, left: 0, behavior: 'auto' }));
+		});
+	}
+
+	restoreAccordionState();
+	sections.forEach(section => section.addEventListener('toggle', saveAccordionState));
+	form.addEventListener('submit', () => {
+		saveAccordionState();
+		storageSet(browserStorage('sessionStorage'), scrollStorageKey, String(Math.max(0, window.scrollY || 0)));
+	});
+	if (document.readyState === 'complete') {
+		restoreScrollAfterSave();
+	} else {
+		window.addEventListener('load', restoreScrollAfterSave, { once: true });
 	}
 
 	function byId(key) {

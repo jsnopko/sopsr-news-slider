@@ -412,7 +412,8 @@ final class SOPSR_News_Slider_Admin {
 	}
 
 	private static function section_open( string $id, string $title, string $description = '' ): void {
-		echo '<details class="sopsr-settings-section" id="sopsr-section-' . esc_attr( $id ) . '" open>';
+		$open = 'content' === $id ? ' open' : '';
+		echo '<details class="sopsr-settings-section" id="sopsr-section-' . esc_attr( $id ) . '"' . $open . '>';
 		echo '<summary><span><strong>' . esc_html( $title ) . '</strong>';
 		if ( $description ) {
 			echo '<small>' . esc_html( $description ) . '</small>';
