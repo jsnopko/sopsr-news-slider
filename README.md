@@ -52,11 +52,11 @@ Desktop / Tablet / Mobile each have:
 
 - width and unit,
 - height mode:
-  - fixed,
-  - auto,
-  - aspect ratio,
-  - clamp,
-  - viewport,
+    - fixed,
+    - auto,
+    - aspect ratio,
+    - clamp,
+    - viewport,
 - image `object-fit`,
 - image X/Y position.
 
@@ -132,7 +132,7 @@ The settings page contains a lightweight live preview with Desktop / Tablet / Mo
 - content alignment,
 - custom CSS using `{{slider}}`.
 
-The preview uses representative Desktop (1100px), Tablet (720px) and Mobile (375px) widths for fluid typography and approximates dimensions to fit the sidebar. Arrow/pagination visibility and control size are global settings; dot size and spacing are fixed frontend styles. Date/excerpt font sizes are not configurable.
+The preview uses representative Desktop (1100px), Tablet (720px) and Mobile (375px) widths for fluid typography and approximates dimensions to fit the sidebar. Responsive content alignment/spacing, title styling, CTA dimensions and control sizes are reflected immediately. Dot size and spacing remain fixed frontend styles. Date/excerpt font sizes are not configurable.
 
 The preview is not a full Splide instance. The public frontend uses real Splide.
 
@@ -188,6 +188,29 @@ docs/
 
 Developer checks (no additional dependencies): `php tests/regression.php` and `node tests/preview.cjs`.
 These cover settings/CSS generation and preview updates; browser and WordPress integration still require the keyboard/manual checks above.
+
+### 0.1.6
+
+- In Nadpis, padding and margin now have separate Top, Right, Bottom and Left values for Desktop, Tablet and Mobile, each with a `px`, `rem` or `em` selector.
+- A compact device switcher and four-side controls follow the editor-style layout shown in the reference images; switching devices also updates Live Preview.
+- Previously saved single padding and margin values are applied to all four sides until changed. New values default to zero.
+
+### 0.1.5
+
+- Added editable all-side padding and margin for the main slider title on Desktop, Tablet and Mobile.
+- Title padding and margin default to `0px`; their values support validated `px`, `rem` and `em` units.
+- Older saved settings inherit the zero defaults, so updating does not change the title spacing until it is configured.
+- Extended preview and regression coverage for responsive title spacing.
+
+### 0.1.4
+
+- Added separate Tablet and Mobile content alignment, maximum content width and content padding settings.
+- Added separate Tablet and Mobile title weight, line-height, maximum width and text-shadow settings.
+- Added separate Tablet and Mobile CTA border, radius, font size/weight and padding settings.
+- Added separate Tablet and Mobile navigation control sizes.
+- Added strictly validated `px`, `rem` and `em` units to the affected content, title, CTA and control dimensions.
+- Existing 0.1.3 settings are inherited at Tablet and Mobile breakpoints until responsive overrides are saved, preserving the previous frontend appearance.
+- Extended Live Preview and regression coverage for the new responsive settings.
 
 ### 0.1.3
 

@@ -1,6 +1,6 @@
 # ŠOP SR News Slider – návrh a základná dokumentácia
 
-**Stav:** implementovaný test build 0.1.3
+**Stav:** implementovaný test build 0.1.6
 **Projekt:** www.sopsr.sk / WordPress + Kadence + Polylang  
 **Knižnica:** Splide.js 4.1.4; plugin podporuje bundled/local cache a CDN fallback  
 **Licencia Splide:** MIT  
@@ -523,3 +523,20 @@ Sekcie zachovávajú natívne details/summary, reset a získavajú otočnú ší
 ## Implementačná poznámka pre verziu 0.1.3
 
 Administrácia ukladá otvorený/zatvorený stav každej `details` sekcie do lokálneho úložiska prehliadača. Ak stav ešte neexistuje, otvorená je iba prvá sekcia. Pri odoslaní pôvodného settings formulára sa do session úložiska uloží aktuálna vertikálna pozícia a po návrate z WordPress `options.php` sa jednorazovo obnoví. Platí to pre obe tlačidlá na uloženie a nemení to nonce, capability kontrolu ani sanitizáciu nastavení.
+
+
+## Implementačná poznámka pre verziu 0.1.4
+
+Tablet a Mobile majú samostatné nastavenia pre zarovnanie, maximálnu šírku a padding obsahu; weight, line-height, maximálnu šírku a tieň nadpisu; border, radius, font size/weight a padding CTA; a veľkosť ovládacích tlačidiel. Rozmerové hodnoty podporujú iba allowlist jednotiek `px`, `rem` a `em`.
+
+Desktop používa doterajšie globálne hodnoty. Pri starších uložených nastaveniach bez nových kľúčov Tablet a Mobile za behu zdedia existujúce globálne hodnoty, takže samotná aktualizácia nemení vzhľad. Po uložení sa samostatné breakpointové hodnoty sanitizujú a frontend ich aplikuje v existujúcich tabletových a mobilných media queries. Live Preview používa rovnaký výber hodnôt podľa aktívneho režimu.
+
+
+## Implementačná poznámka pre verziu 0.1.5
+
+Hlavný nadpis má samostatný all-side padding a margin pre Desktop, Tablet aj Mobile. Obe hodnoty majú predvolenú hodnotu `0px` a používajú iba allowlist jednotiek `px`, `rem` a `em`. Pri uložených nastaveniach zo starších verzií sa chýbajúce hodnoty načítajú ako nula, preto aktualizácia nemení existujúce rozloženie. Live Preview aj frontendové media queries používajú rovnaké hodnoty podľa zvoleného breakpointu.
+
+
+## Implementačná poznámka pre verziu 0.1.6
+
+Sekcia Nadpis používa pre padding a margin štyri samostatné strany (hore, vpravo, dole, vľavo) a prepínač Desktop/Tablet/Mobile. Každá strana má číselnú hodnotu a jednotku `px`, `rem` alebo `em`. Prepnutie zariadenia zobrazí príslušné polia a prepne Live Preview. Pri starších uložených nastaveniach sa pôvodná spoločná hodnota a jednotka prenesú na všetky štyri strany príslušného zariadenia; nové nastavenia začínajú na `0px`. Ostatné sekcie používajú pôvodné ovládanie.

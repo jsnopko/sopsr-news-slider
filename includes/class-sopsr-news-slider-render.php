@@ -471,28 +471,28 @@ final class SOPSR_News_Slider_Render {
 		$control_bg = self::rgba( $settings['controls_bg_color'], (int) $settings['controls_bg_opacity'] / 100 );
 
 		$css[] = sprintf(
-			'%1$s{--sopsr-image-bg:%2$s;--sopsr-overlay:%3$s;--sopsr-title:%4$s;--sopsr-content-max:%5$dpx;--sopsr-pad-x:%6$dpx;--sopsr-pad-y:%7$dpx;--sopsr-cta-text:%8$s;--sopsr-cta-bg:%9$s;--sopsr-cta-hover-text:%10$s;--sopsr-cta-hover-bg:%11$s;--sopsr-cta-border:%12$s;--sopsr-cta-border-width:%13$dpx;--sopsr-cta-radius:%14$dpx;--sopsr-cta-font:%15$s;--sopsr-cta-weight:%16$s;--sopsr-cta-py:%17$dpx;--sopsr-cta-px:%18$dpx;--sopsr-control-color:%19$s;--sopsr-control-bg:%20$s;--sopsr-control-size:%21$dpx;--sopsr-page-active:%22$s;--sopsr-page:%23$s;--sopsr-focus:%24$s;}',
+			'%1$s{--sopsr-image-bg:%2$s;--sopsr-overlay:%3$s;--sopsr-title:%4$s;--sopsr-content-max:%5$s;--sopsr-pad-x:%6$s;--sopsr-pad-y:%7$s;--sopsr-cta-text:%8$s;--sopsr-cta-bg:%9$s;--sopsr-cta-hover-text:%10$s;--sopsr-cta-hover-bg:%11$s;--sopsr-cta-border:%12$s;--sopsr-cta-border-width:%13$s;--sopsr-cta-radius:%14$s;--sopsr-cta-font:%15$s;--sopsr-cta-weight:%16$s;--sopsr-cta-py:%17$s;--sopsr-cta-px:%18$s;--sopsr-control-color:%19$s;--sopsr-control-bg:%20$s;--sopsr-control-size:%21$s;--sopsr-page-active:%22$s;--sopsr-page:%23$s;--sopsr-focus:%24$s;}',
 			$selector,
 			$settings['image_background_color'],
 			$overlay,
 			$settings['title_color'],
-			(int) $settings['content_max_width'],
-			(int) $settings['content_padding_x'],
-			(int) $settings['content_padding_y'],
+			self::dimension( $settings, 'content_max_width' ),
+			self::dimension( $settings, 'content_padding_x' ),
+			self::dimension( $settings, 'content_padding_y' ),
 			$settings['cta_text_color'],
 			$settings['cta_bg_color'],
 			$settings['cta_hover_text_color'],
 			$settings['cta_hover_bg_color'],
 			$settings['cta_border_color'],
-			(int) $settings['cta_border_width'],
-			(int) $settings['cta_border_radius'],
+			self::dimension( $settings, 'cta_border_width' ),
+			self::dimension( $settings, 'cta_border_radius' ),
 			self::font_size( $settings, 'cta_font_size' ),
 			$settings['cta_font_weight'],
-			(int) $settings['cta_padding_y'],
-			(int) $settings['cta_padding_x'],
+			self::dimension( $settings, 'cta_padding_y' ),
+			self::dimension( $settings, 'cta_padding_x' ),
 			$settings['controls_color'],
 			$control_bg,
-			(int) $settings['controls_size'],
+			self::dimension( $settings, 'controls_size' ),
 			$settings['pagination_active_color'],
 			$settings['pagination_color'],
 			$settings['focus_color']
@@ -515,12 +515,14 @@ final class SOPSR_News_Slider_Render {
 		}
 
 		$css[] = sprintf(
-			'%1$s .sopsr-news-slider__title{font-size:%2$s;font-weight:%3$s;line-height:%4$s;max-width:%5$dpx;%6$s}',
+			'%1$s .sopsr-news-slider__title{font-size:%2$s;font-weight:%3$s;line-height:%4$s;max-width:%5$s;padding:%6$s;margin:%7$s;%8$s}',
 			$selector,
 			$title_size,
 			$settings['title_weight'],
 			(float) $settings['title_line_height'],
-			(int) $settings['title_max_width'],
+			self::dimension( $settings, 'title_max_width' ),
+			self::title_spacing( $settings, 'title_padding' ),
+			self::title_spacing( $settings, 'title_margin' ),
 			! empty( $settings['title_text_shadow'] ) ? 'text-shadow:0 2px 8px rgba(0,0,0,.45);' : 'text-shadow:none;'
 		);
 
@@ -529,10 +531,12 @@ final class SOPSR_News_Slider_Render {
 		$tablet_media = '@media (max-width:' . (int) $settings['tablet_breakpoint'] . 'px){';
 		$tablet_rules = self::device_css( $selector, 'tablet', $settings['responsive']['tablet'], ! empty( $settings['full_bleed'] ), $tablet_media );
 		$css           = array_merge( $css, $tablet_rules );
+		$css[]         = self::responsive_style_css( $selector, $settings, 'tablet', $tablet_media );
 
 		$mobile_media = '@media (max-width:' . (int) $settings['mobile_breakpoint'] . 'px){';
 		$mobile_rules = self::device_css( $selector, 'mobile', $settings['responsive']['mobile'], ! empty( $settings['full_bleed'] ), $mobile_media );
 		$css           = array_merge( $css, $mobile_rules );
+		$css[]         = self::responsive_style_css( $selector, $settings, 'mobile', $mobile_media );
 
 		if ( 'responsive' === $settings['title_font_mode'] ) {
 			$css[] = '@media (max-width:' . (int) $settings['tablet_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . self::font_size( $settings, 'title_tablet' ) . ';}}';
@@ -642,10 +646,68 @@ final class SOPSR_News_Slider_Render {
 		return 'center';
 	}
 
-	private static function font_size( array $settings, string $key ): string {
+	private static function responsive_style_css( string $selector, array $settings, string $device, string $media_start ): string {
+		$halign = (string) self::responsive_value( $settings, $device, 'content_halign' );
+		$valign = (string) self::responsive_value( $settings, $device, 'content_valign' );
+		$root_rule = $selector . '{'
+			. '--sopsr-content-max:' . self::responsive_dimension( $settings, $device, 'content_max_width' ) . ';'
+			. '--sopsr-pad-x:' . self::responsive_dimension( $settings, $device, 'content_padding_x' ) . ';'
+			. '--sopsr-pad-y:' . self::responsive_dimension( $settings, $device, 'content_padding_y' ) . ';'
+			. '--sopsr-cta-border-width:' . self::responsive_dimension( $settings, $device, 'cta_border_width' ) . ';'
+			. '--sopsr-cta-radius:' . self::responsive_dimension( $settings, $device, 'cta_border_radius' ) . ';'
+			. '--sopsr-cta-font:' . self::responsive_dimension( $settings, $device, 'cta_font_size' ) . ';'
+			. '--sopsr-cta-weight:' . self::responsive_value( $settings, $device, 'cta_font_weight' ) . ';'
+			. '--sopsr-cta-py:' . self::responsive_dimension( $settings, $device, 'cta_padding_y' ) . ';'
+			. '--sopsr-cta-px:' . self::responsive_dimension( $settings, $device, 'cta_padding_x' ) . ';'
+			. '--sopsr-control-size:' . self::responsive_dimension( $settings, $device, 'controls_size' ) . ';}';
+		$content_rule = $selector . ' .sopsr-news-slider__content{align-items:' . self::align_to_grid( $valign )
+			. ';justify-items:' . self::align_to_grid( $halign ) . ';text-align:' . $halign . ';}';
+		$excerpt_rule = $selector . ' .sopsr-news-slider__excerpt{margin-left:'
+			. ( 'right' === $halign ? 'auto' : ( 'center' === $halign ? 'auto' : '0' ) )
+			. ';margin-right:' . ( 'left' === $halign ? 'auto' : ( 'center' === $halign ? 'auto' : '0' ) ) . ';}';
+		$title_rule = $selector . ' .sopsr-news-slider__title{font-weight:' . self::responsive_value( $settings, $device, 'title_weight' )
+			. ';line-height:' . self::clean_number( self::responsive_value( $settings, $device, 'title_line_height' ) )
+			. ';max-width:' . self::responsive_dimension( $settings, $device, 'title_max_width' ) . ';'
+			. 'padding:' . self::title_spacing( $settings, 'title_padding', $device ) . ';'
+			. 'margin:' . self::title_spacing( $settings, 'title_margin', $device ) . ';'
+			. ( ! empty( self::responsive_value( $settings, $device, 'title_text_shadow' ) ) ? 'text-shadow:0 2px 8px rgba(0,0,0,.45);' : 'text-shadow:none;' ) . '}';
+
+		return $media_start . $root_rule . $content_rule . $excerpt_rule . $title_rule . '}';
+	}
+
+	private static function responsive_value( array $settings, string $device, string $key ) {
+		return $settings['responsive'][ $device ][ $key ] ?? $settings[ $key ];
+	}
+
+	private static function responsive_dimension( array $settings, string $device, string $key ): string {
+		$value = self::responsive_value( $settings, $device, $key );
+		$unit  = $settings['responsive'][ $device ][ $key . '_unit' ] ?? $settings[ $key . '_unit' ] ?? 'px';
+		$unit  = in_array( $unit, array( 'px', 'rem', 'em' ), true ) ? $unit : 'px';
+		return self::css_number( $value, $unit );
+	}
+
+	private static function title_spacing( array $settings, string $property, string $device = 'desktop' ): string {
+		$values = array();
+		foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+			$key = $property . '_' . $side;
+			if ( 'desktop' === $device ) {
+				$values[] = self::dimension( $settings, array_key_exists( $key, $settings ) ? $key : $property );
+			} else {
+				$device_settings = $settings['responsive'][ $device ] ?? array();
+				$values[] = self::responsive_dimension( $settings, $device, array_key_exists( $key, $device_settings ) ? $key : $property );
+			}
+		}
+		return implode( ' ', $values );
+	}
+
+	private static function dimension( array $settings, string $key ): string {
 		$unit = $settings[ $key . '_unit' ] ?? 'px';
 		$unit = in_array( $unit, array( 'px', 'rem', 'em' ), true ) ? $unit : 'px';
 		return self::css_number( $settings[ $key ], $unit );
+	}
+
+	private static function font_size( array $settings, string $key ): string {
+		return self::dimension( $settings, $key );
 	}
 
 	private static function css_number( $value, string $unit ): string {

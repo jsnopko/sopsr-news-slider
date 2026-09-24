@@ -24,7 +24,7 @@ final class SOPSR_News_Slider_Settings {
 	}
 
 	public static function defaults(): array {
-		return array(
+		$defaults = array(
 			'post_count'              => 5,
 			'include_categories'      => array(),
 			'exclude_categories'      => array(),
@@ -45,8 +45,11 @@ final class SOPSR_News_Slider_Settings {
 			'content_halign'           => 'center',
 			'content_valign'           => 'center',
 			'content_max_width'        => 1100,
+			'content_max_width_unit'   => 'px',
 			'content_padding_x'        => 32,
+			'content_padding_x_unit'   => 'px',
 			'content_padding_y'        => 32,
+			'content_padding_y_unit'   => 'px',
 
 			'tablet_breakpoint'        => 1024,
 			'mobile_breakpoint'        => 767,
@@ -66,6 +69,36 @@ final class SOPSR_News_Slider_Settings {
 					'fit'          => 'cover',
 					'position_x'   => 50,
 					'position_y'   => 50,
+					'content_halign'         => 'center',
+					'content_valign'         => 'center',
+					'content_max_width'      => 1100,
+					'content_max_width_unit' => 'px',
+					'content_padding_x'      => 32,
+					'content_padding_x_unit' => 'px',
+					'content_padding_y'      => 32,
+					'content_padding_y_unit' => 'px',
+					'title_weight'           => 700,
+					'title_line_height'      => 1.15,
+					'title_max_width'        => 900,
+					'title_max_width_unit'   => 'px',
+					'title_padding'          => 0,
+					'title_padding_unit'     => 'px',
+					'title_margin'           => 0,
+					'title_margin_unit'      => 'px',
+					'title_text_shadow'      => 1,
+					'cta_border_width'       => 1,
+					'cta_border_width_unit'  => 'px',
+					'cta_border_radius'      => 4,
+					'cta_border_radius_unit' => 'px',
+					'cta_font_size'          => 16,
+					'cta_font_size_unit'     => 'px',
+					'cta_font_weight'        => 600,
+					'cta_padding_y'          => 12,
+					'cta_padding_y_unit'     => 'px',
+					'cta_padding_x'          => 22,
+					'cta_padding_x_unit'     => 'px',
+					'controls_size'          => 46,
+					'controls_size_unit'     => 'px',
 				),
 				'tablet' => array(
 					'width_value'  => 100,
@@ -81,6 +114,36 @@ final class SOPSR_News_Slider_Settings {
 					'fit'          => 'cover',
 					'position_x'   => 50,
 					'position_y'   => 50,
+					'content_halign'         => 'center',
+					'content_valign'         => 'center',
+					'content_max_width'      => 1100,
+					'content_max_width_unit' => 'px',
+					'content_padding_x'      => 32,
+					'content_padding_x_unit' => 'px',
+					'content_padding_y'      => 32,
+					'content_padding_y_unit' => 'px',
+					'title_weight'           => 700,
+					'title_line_height'      => 1.15,
+					'title_max_width'        => 900,
+					'title_max_width_unit'   => 'px',
+					'title_padding'          => 0,
+					'title_padding_unit'     => 'px',
+					'title_margin'           => 0,
+					'title_margin_unit'      => 'px',
+					'title_text_shadow'      => 1,
+					'cta_border_width'       => 1,
+					'cta_border_width_unit'  => 'px',
+					'cta_border_radius'      => 4,
+					'cta_border_radius_unit' => 'px',
+					'cta_font_size'          => 16,
+					'cta_font_size_unit'     => 'px',
+					'cta_font_weight'        => 600,
+					'cta_padding_y'          => 12,
+					'cta_padding_y_unit'     => 'px',
+					'cta_padding_x'          => 22,
+					'cta_padding_x_unit'     => 'px',
+					'controls_size'          => 46,
+					'controls_size_unit'     => 'px',
 				),
 				'mobile' => array(
 					'width_value'  => 100,
@@ -96,6 +159,36 @@ final class SOPSR_News_Slider_Settings {
 					'fit'          => 'cover',
 					'position_x'   => 50,
 					'position_y'   => 50,
+					'content_halign'         => 'center',
+					'content_valign'         => 'center',
+					'content_max_width'      => 1100,
+					'content_max_width_unit' => 'px',
+					'content_padding_x'      => 32,
+					'content_padding_x_unit' => 'px',
+					'content_padding_y'      => 32,
+					'content_padding_y_unit' => 'px',
+					'title_weight'           => 700,
+					'title_line_height'      => 1.15,
+					'title_max_width'        => 900,
+					'title_max_width_unit'   => 'px',
+					'title_padding'          => 0,
+					'title_padding_unit'     => 'px',
+					'title_margin'           => 0,
+					'title_margin_unit'      => 'px',
+					'title_text_shadow'      => 1,
+					'cta_border_width'       => 1,
+					'cta_border_width_unit'  => 'px',
+					'cta_border_radius'      => 4,
+					'cta_border_radius_unit' => 'px',
+					'cta_font_size'          => 16,
+					'cta_font_size_unit'     => 'px',
+					'cta_font_weight'        => 600,
+					'cta_padding_y'          => 12,
+					'cta_padding_y_unit'     => 'px',
+					'cta_padding_x'          => 22,
+					'cta_padding_x_unit'     => 'px',
+					'controls_size'          => 46,
+					'controls_size_unit'     => 'px',
 				),
 			),
 
@@ -122,6 +215,11 @@ final class SOPSR_News_Slider_Settings {
 			'title_weight'            => 700,
 			'title_line_height'       => 1.15,
 			'title_max_width'         => 900,
+			'title_max_width_unit'    => 'px',
+			'title_padding'           => 0,
+			'title_padding_unit'      => 'px',
+			'title_margin'            => 0,
+			'title_margin_unit'       => 'px',
 			'title_text_shadow'       => 1,
 
 			'cta_text_color'          => '#ffffff',
@@ -132,12 +230,16 @@ final class SOPSR_News_Slider_Settings {
 			'cta_focus_bg_color'      => '#2f6f3e',
 			'cta_border_color'        => '#2f6f3e',
 			'cta_border_width'        => 1,
+			'cta_border_width_unit'   => 'px',
 			'cta_border_radius'       => 4,
+			'cta_border_radius_unit'  => 'px',
 			'cta_font_size'           => 16,
 			'cta_font_size_unit'      => 'px',
 			'cta_font_weight'         => 600,
 			'cta_padding_y'           => 12,
+			'cta_padding_y_unit'      => 'px',
 			'cta_padding_x'           => 22,
+			'cta_padding_x_unit'      => 'px',
 
 			'transition'              => 'fade',
 			'loop'                    => 1,
@@ -174,6 +276,7 @@ final class SOPSR_News_Slider_Settings {
 			'controls_bg_color'       => '#000000',
 			'controls_bg_opacity'     => 35,
 			'controls_size'           => 46,
+			'controls_size_unit'      => 'px',
 			'pagination_active_color' => '#ffffff',
 			'pagination_color'        => '#ffffff',
 			'focus_color'             => '#ffcc00',
@@ -184,6 +287,18 @@ final class SOPSR_News_Slider_Settings {
 
 			'translations'            => self::translation_defaults(),
 		);
+		foreach ( array( 'title_padding', 'title_margin' ) as $property ) {
+			foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+				$key = $property . '_' . $side;
+				$defaults[ $key ] = 0;
+				$defaults[ $key . '_unit' ] = 'px';
+				foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+					$defaults['responsive'][ $device ][ $key ] = 0;
+					$defaults['responsive'][ $device ][ $key . '_unit' ] = 'px';
+				}
+			}
+		}
+		return $defaults;
 	}
 
 	public static function translation_defaults(): array {
@@ -292,6 +407,35 @@ final class SOPSR_News_Slider_Settings {
 				$settings[ $key ] = $settings[ 'cta_' . $part . '_color' ];
 			}
 		}
+		$responsive_fallbacks = self::responsive_style_fallbacks();
+		foreach ( array( 'tablet', 'mobile' ) as $device ) {
+			$saved_device = isset( $saved['responsive'][ $device ] ) && is_array( $saved['responsive'][ $device ] ) ? $saved['responsive'][ $device ] : array();
+			foreach ( $responsive_fallbacks as $responsive_key => $global_key ) {
+				if ( ! array_key_exists( $responsive_key, $saved_device ) ) {
+					$settings['responsive'][ $device ][ $responsive_key ] = $settings[ $global_key ];
+				}
+			}
+		}
+		foreach ( array( 'title_padding', 'title_margin' ) as $property ) {
+			foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+				$key = $property . '_' . $side;
+				if ( ! array_key_exists( $key, $saved ) ) {
+					$settings[ $key ] = $settings[ $property ];
+				}
+				if ( ! array_key_exists( $key . '_unit', $saved ) ) {
+					$settings[ $key . '_unit' ] = $settings[ $property . '_unit' ];
+				}
+				foreach ( array( 'tablet', 'mobile' ) as $device ) {
+					$saved_device = isset( $saved['responsive'][ $device ] ) && is_array( $saved['responsive'][ $device ] ) ? $saved['responsive'][ $device ] : array();
+					if ( ! array_key_exists( $key, $saved_device ) ) {
+						$settings['responsive'][ $device ][ $key ] = $saved_device[ $property ] ?? $settings[ $key ];
+					}
+					if ( ! array_key_exists( $key . '_unit', $saved_device ) ) {
+						$settings['responsive'][ $device ][ $key . '_unit' ] = $saved_device[ $property . '_unit' ] ?? $settings[ $key . '_unit' ];
+					}
+				}
+			}
+		}
 		return $settings;
 	}
 
@@ -381,11 +525,31 @@ final class SOPSR_News_Slider_Settings {
 			$out[ $key ] = ! empty( $input[ $key ] ) ? 1 : 0;
 		}
 
-		$out['content_halign']    = self::enum( $input, 'content_halign', array( 'left', 'center', 'right' ), $defaults['content_halign'] );
-		$out['content_valign']    = self::enum( $input, 'content_valign', array( 'top', 'center', 'bottom' ), $defaults['content_valign'] );
-		$out['content_max_width'] = self::int_range( $input, 'content_max_width', 240, 2400, $defaults['content_max_width'] );
-		$out['content_padding_x'] = self::int_range( $input, 'content_padding_x', 0, 200, $defaults['content_padding_x'] );
-		$out['content_padding_y'] = self::int_range( $input, 'content_padding_y', 0, 200, $defaults['content_padding_y'] );
+		$out['content_halign'] = self::enum( $input, 'content_halign', array( 'left', 'center', 'right' ), $defaults['content_halign'] );
+		$out['content_valign'] = self::enum( $input, 'content_valign', array( 'top', 'center', 'bottom' ), $defaults['content_valign'] );
+		foreach ( array(
+			'content_max_width'  => array( 0.01, 2400 ),
+			'content_padding_x'  => array( 0, 200 ),
+			'content_padding_y'  => array( 0, 200 ),
+			'title_max_width'    => array( 0.01, 2000 ),
+			'title_padding'      => array( 0, 500 ),
+			'title_margin'       => array( 0, 500 ),
+			'cta_border_width'   => array( 0, 100 ),
+			'cta_border_radius'  => array( 0, 200 ),
+			'cta_padding_y'      => array( 0, 200 ),
+			'cta_padding_x'      => array( 0, 300 ),
+			'controls_size'      => array( 0.01, 200 ),
+		) as $key => $range ) {
+			$out[ $key ] = self::float_range_input( $input, $key, $range[0], $range[1], $defaults[ $key ] );
+			$out[ $key . '_unit' ] = self::enum( $input, $key . '_unit', array( 'px', 'rem', 'em' ), 'px' );
+		}
+		foreach ( array( 'title_padding', 'title_margin' ) as $property ) {
+			foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+				$key = $property . '_' . $side;
+				$out[ $key ] = self::float_range_value( $input[ $key ] ?? $input[ $property ] ?? 0, 0, 500, 0 );
+				$out[ $key . '_unit' ] = self::enum_value( $input[ $key . '_unit' ] ?? $input[ $property . '_unit' ] ?? 'px', array( 'px', 'rem', 'em' ), 'px' );
+			}
+		}
 
 		$out['tablet_breakpoint'] = self::int_range( $input, 'tablet_breakpoint', 600, 1600, $defaults['tablet_breakpoint'] );
 		$out['mobile_breakpoint'] = self::int_range( $input, 'mobile_breakpoint', 320, 1000, $defaults['mobile_breakpoint'] );
@@ -413,6 +577,45 @@ final class SOPSR_News_Slider_Settings {
 				'position_x'   => self::float_range_value( $source['position_x'] ?? $def['position_x'], 0, 100, $def['position_x'] ),
 				'position_y'   => self::float_range_value( $source['position_y'] ?? $def['position_y'], 0, 100, $def['position_y'] ),
 			);
+
+			$out['responsive'][ $device ] += array(
+				'content_halign'         => self::enum_value( $source['content_halign'] ?? $out['content_halign'], array( 'left', 'center', 'right' ), $out['content_halign'] ),
+				'content_valign'         => self::enum_value( $source['content_valign'] ?? $out['content_valign'], array( 'top', 'center', 'bottom' ), $out['content_valign'] ),
+				'title_weight'           => self::enum_value( (string) ( $source['title_weight'] ?? $input['title_weight'] ?? $defaults['title_weight'] ), array( '300', '400', '500', '600', '700', '800', '900' ), (string) $defaults['title_weight'] ),
+				'title_line_height'      => self::float_range_value( $source['title_line_height'] ?? $input['title_line_height'] ?? $defaults['title_line_height'], 0.8, 2.5, $defaults['title_line_height'] ),
+				'title_text_shadow'      => ! empty( $source['title_text_shadow'] ?? $input['title_text_shadow'] ?? $defaults['title_text_shadow'] ) ? 1 : 0,
+				'cta_font_weight'        => self::enum_value( (string) ( $source['cta_font_weight'] ?? $input['cta_font_weight'] ?? $defaults['cta_font_weight'] ), array( '300', '400', '500', '600', '700', '800', '900' ), (string) $defaults['cta_font_weight'] ),
+			);
+			foreach ( array(
+				'content_max_width' => array( 0.01, 2400 ),
+				'content_padding_x' => array( 0, 200 ),
+				'content_padding_y' => array( 0, 200 ),
+				'title_max_width'   => array( 0.01, 2000 ),
+				'title_padding'     => array( 0, 500 ),
+				'title_margin'      => array( 0, 500 ),
+				'cta_border_width'  => array( 0, 100 ),
+				'cta_border_radius' => array( 0, 200 ),
+				'cta_font_size'     => array( 0.01, 140 ),
+				'cta_padding_y'     => array( 0, 200 ),
+				'cta_padding_x'     => array( 0, 300 ),
+				'controls_size'     => array( 0.01, 200 ),
+			) as $key => $range ) {
+				$global_default = array_key_exists( $key, $out )
+					? $out[ $key ]
+					: self::float_range_value( $input[ $key ] ?? $defaults[ $key ], $range[0], $range[1], $defaults[ $key ] );
+				$global_unit = array_key_exists( $key . '_unit', $out )
+					? $out[ $key . '_unit' ]
+					: self::enum_value( $input[ $key . '_unit' ] ?? $defaults[ $key . '_unit' ] ?? 'px', array( 'px', 'rem', 'em' ), 'px' );
+				$out['responsive'][ $device ][ $key ] = self::float_range_value( $source[ $key ] ?? $global_default, $range[0], $range[1], $global_default );
+				$out['responsive'][ $device ][ $key . '_unit' ] = self::enum_value( $source[ $key . '_unit' ] ?? $global_unit, array( 'px', 'rem', 'em' ), 'px' );
+			}
+			foreach ( array( 'title_padding', 'title_margin' ) as $property ) {
+				foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+					$key = $property . '_' . $side;
+					$out['responsive'][ $device ][ $key ] = self::float_range_value( $source[ $key ] ?? $source[ $property ] ?? $out[ $key ], 0, 500, $out[ $key ] );
+					$out['responsive'][ $device ][ $key . '_unit' ] = self::enum_value( $source[ $key . '_unit' ] ?? $source[ $property . '_unit' ] ?? $out[ $key . '_unit' ], array( 'px', 'rem', 'em' ), 'px' );
+				}
+			}
 		}
 
 		foreach ( array(
@@ -454,13 +657,8 @@ final class SOPSR_News_Slider_Settings {
 		$out['title_clamp_fluid'] = self::float_range_input( $input, 'title_clamp_fluid', 0.1, 20, $defaults['title_clamp_fluid'] );
 		$out['title_weight']      = self::enum( $input, 'title_weight', array( '300', '400', '500', '600', '700', '800', '900' ), (string) $defaults['title_weight'] );
 		$out['title_line_height'] = self::float_range_input( $input, 'title_line_height', 0.8, 2.5, $defaults['title_line_height'] );
-		$out['title_max_width']   = self::int_range( $input, 'title_max_width', 200, 2000, $defaults['title_max_width'] );
 
 		foreach ( array(
-			'cta_border_width'  => array( 0, 10 ),
-			'cta_border_radius' => array( 0, 100 ),
-			'cta_padding_y'     => array( 0, 60 ),
-			'cta_padding_x'     => array( 0, 100 ),
 			'speed'             => array( 0, 10000 ),
 			'rewind_speed'      => array( 0, 10000 ),
 			'interval'          => array( 1000, 60000 ),
@@ -470,7 +668,6 @@ final class SOPSR_News_Slider_Settings {
 			'wheel_sleep'       => array( 0, 5000 ),
 			'flick_power'       => array( 0, 2000 ),
 			'flick_max_pages'   => array( 1, 10 ),
-			'controls_size'     => array( 28, 100 ),
 		) as $key => $range ) {
 			$out[ $key ] = self::int_range( $input, $key, $range[0], $range[1], $defaults[ $key ] );
 		}
@@ -517,6 +714,41 @@ final class SOPSR_News_Slider_Settings {
 			}
 		}
 		return $defaults;
+	}
+
+	private static function responsive_style_fallbacks(): array {
+		return array(
+			'content_halign'         => 'content_halign',
+			'content_valign'         => 'content_valign',
+			'content_max_width'      => 'content_max_width',
+			'content_max_width_unit' => 'content_max_width_unit',
+			'content_padding_x'      => 'content_padding_x',
+			'content_padding_x_unit' => 'content_padding_x_unit',
+			'content_padding_y'      => 'content_padding_y',
+			'content_padding_y_unit' => 'content_padding_y_unit',
+			'title_weight'           => 'title_weight',
+			'title_line_height'      => 'title_line_height',
+			'title_max_width'        => 'title_max_width',
+			'title_max_width_unit'   => 'title_max_width_unit',
+			'title_padding'          => 'title_padding',
+			'title_padding_unit'     => 'title_padding_unit',
+			'title_margin'           => 'title_margin',
+			'title_margin_unit'      => 'title_margin_unit',
+			'title_text_shadow'      => 'title_text_shadow',
+			'cta_border_width'       => 'cta_border_width',
+			'cta_border_width_unit'  => 'cta_border_width_unit',
+			'cta_border_radius'      => 'cta_border_radius',
+			'cta_border_radius_unit' => 'cta_border_radius_unit',
+			'cta_font_size'          => 'cta_font_size',
+			'cta_font_size_unit'     => 'cta_font_size_unit',
+			'cta_font_weight'        => 'cta_font_weight',
+			'cta_padding_y'          => 'cta_padding_y',
+			'cta_padding_y_unit'     => 'cta_padding_y_unit',
+			'cta_padding_x'          => 'cta_padding_x',
+			'cta_padding_x_unit'     => 'cta_padding_x_unit',
+			'controls_size'          => 'controls_size',
+			'controls_size_unit'     => 'controls_size_unit',
+		);
 	}
 
 	private static function sanitize_id_array( $value ): array {

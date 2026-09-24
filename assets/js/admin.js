@@ -125,6 +125,36 @@
 		return Math.max(.01, num(val(key, fallback), fallback)) + (['px', 'rem', 'em'].includes(unit) ? unit : 'px');
 	}
 
+	function responsiveValue(device, key, fallback) {
+		const desktopValue = val(key, fallback);
+		return device === 'desktop' ? desktopValue : nestedValue(device, key, desktopValue);
+	}
+
+	function responsiveChecked(device, key) {
+		if (device === 'desktop') {
+			return checked(key);
+		}
+		const field = nested(['responsive', device, key]);
+		return field ? Boolean(field.checked) : checked(key);
+	}
+
+	function responsiveDimension(device, key, fallback) {
+		const value = Math.max(0, num(responsiveValue(device, key, fallback), fallback));
+		const desktopUnit = val(key + '_unit', 'px');
+		const unit = device === 'desktop' ? desktopUnit : nestedValue(device, key + '_unit', desktopUnit);
+		return value + (['px', 'rem', 'em'].includes(unit) ? unit : 'px');
+	}
+
+	function titleSpacing(device, property) {
+		return ['top', 'right', 'bottom', 'left'].map(side => {
+			const key = property + '_' + side;
+			if (!byId(key) && (device === 'desktop' || !nested(['responsive', device, key]))) {
+				return responsiveDimension(device, property, 0);
+			}
+			return responsiveDimension(device, key, 0);
+		}).join(' ');
+	}
+
 	function hexToRgba(hex, alpha) {
 		let value = String(hex || '#000000').replace('#', '').trim();
 		if (value.length === 3) {
@@ -177,12 +207,13 @@
 			preview.style.setProperty('--sopsr-' + variable, val(key, cfg.defaults?.[key]));
 		});
 		preview.style.setProperty('--sopsr-control-bg', hexToRgba(val('controls_bg_color', '#000000'), num(val('controls_bg_opacity', 35), 35) / 100));
-		preview.style.setProperty('--sopsr-control-size', num(val('controls_size', 46), 46) + 'px');
+		preview.style.setProperty('--sopsr-control-size', responsiveDimension(device, 'controls_size', 46));
 		preview.querySelector('.sopsr-news-slider__arrows').hidden = !checked('arrows');
 		preview.querySelector('.splide__pagination').hidden = !checked('pagination');
 		const image = preview.querySelector('.sopsr-preview-image');
 		const overlay = preview.querySelector('.sopsr-preview-overlay');
 		const content = preview.querySelector('.sopsr-preview-content');
+		const inner = preview.querySelector('.sopsr-preview-inner');
 		const title = preview.querySelector('.sopsr-preview-title');
 		const cta = preview.querySelector('.sopsr-preview-cta');
 
@@ -247,22 +278,28 @@
 		}
 
 		if (content) {
-			const h = val('content_halign', 'center');
-			const v = val('content_valign', 'center');
+			const h = responsiveValue(device, 'content_halign', 'center');
+			const v = responsiveValue(device, 'content_valign', 'center');
 			content.style.justifyItems = h === 'left' ? 'start' : h === 'right' ? 'end' : 'center';
 			content.style.alignItems = v === 'top' ? 'start' : v === 'bottom' ? 'end' : 'center';
 			content.style.textAlign = h;
 			content.style.padding =
-				Math.max(0, num(val('content_padding_y', 32), 32)) + 'px ' +
-				Math.max(0, num(val('content_padding_x', 32), 32)) + 'px';
+				responsiveDimension(device, 'content_padding_y', 32) + ' ' +
+				responsiveDimension(device, 'content_padding_x', 32);
+		}
+
+		if (inner) {
+			inner.style.width = 'min(100%,' + responsiveDimension(device, 'content_max_width', 1100) + ')';
 		}
 
 		if (title) {
 			title.style.color = val('title_color', '#ffffff');
-			title.style.fontWeight = val('title_weight', '700');
-			title.style.lineHeight = val('title_line_height', '1.15');
-			title.style.maxWidth = num(val('title_max_width', 900), 900) + 'px';
-			title.style.textShadow = checked('title_text_shadow') ? '0 2px 8px rgba(0,0,0,.45)' : 'none';
+			title.style.fontWeight = responsiveValue(device, 'title_weight', '700');
+			title.style.lineHeight = responsiveValue(device, 'title_line_height', '1.15');
+			title.style.maxWidth = responsiveDimension(device, 'title_max_width', 900);
+			title.style.padding = titleSpacing(device, 'title_padding');
+			title.style.margin = titleSpacing(device, 'title_margin');
+			title.style.textShadow = responsiveChecked(device, 'title_text_shadow') ? '0 2px 8px rgba(0,0,0,.45)' : 'none';
 
 			if (val('title_font_mode', 'clamp') === 'clamp') {
 				title.style.fontSize =
@@ -279,13 +316,13 @@
 			const enabled = checked('cta_enabled');
 			cta.style.display = enabled ? 'inline-flex' : 'none';
 			cta.style.borderColor = val('cta_border_color', '#2f6f3e');
-			cta.style.borderWidth = num(val('cta_border_width', 1), 1) + 'px';
-			cta.style.borderRadius = num(val('cta_border_radius', 4), 4) + 'px';
-			cta.style.fontSize = fontSize('cta_font_size', 16);
-			cta.style.fontWeight = val('cta_font_weight', '600');
+			cta.style.borderWidth = responsiveDimension(device, 'cta_border_width', 1);
+			cta.style.borderRadius = responsiveDimension(device, 'cta_border_radius', 4);
+			cta.style.fontSize = responsiveDimension(device, 'cta_font_size', 16);
+			cta.style.fontWeight = responsiveValue(device, 'cta_font_weight', '600');
 			cta.style.padding =
-				num(val('cta_padding_y', 12), 12) + 'px ' +
-				num(val('cta_padding_x', 22), 22) + 'px';
+				responsiveDimension(device, 'cta_padding_y', 12) + ' ' +
+				responsiveDimension(device, 'cta_padding_x', 22);
 
 			const skCta = nested(['translations', 'sk', 'cta_text']);
 			const anyCta = form.querySelector('[name*="[translations]"][name$="[cta_text]"]');
@@ -358,12 +395,38 @@
 	form.addEventListener('change', updatePreview);
 	preview?.querySelector('.sopsr-preview-cta')?.addEventListener('click', event => event.preventDefault());
 
+	function showTitleSpacingDevice(device) {
+		document.querySelectorAll('[data-title-spacing-device]').forEach(tab => {
+			const active = tab.dataset.titleSpacingDevice === device;
+			tab.classList.toggle('is-active', active);
+			tab.setAttribute('aria-pressed', String(active));
+		});
+		document.querySelectorAll('[data-title-spacing-panel]').forEach(panel => {
+			panel.hidden = panel.dataset.titleSpacingPanel !== device;
+		});
+	}
+
 	document.querySelectorAll('.sopsr-preview-devices [data-preview-device]').forEach(button => {
 		button.addEventListener('click', () => {
 			document.querySelectorAll('.sopsr-preview-devices [data-preview-device]').forEach(item => item.classList.remove('is-active'));
 			button.classList.add('is-active');
 			stage.dataset.device = button.dataset.previewDevice;
+			showTitleSpacingDevice(stage.dataset.device);
 			updatePreview();
+		});
+	});
+
+	document.querySelectorAll('[data-title-spacing-device]').forEach(button => {
+		button.addEventListener('click', () => {
+			const device = button.dataset.titleSpacingDevice;
+			showTitleSpacingDevice(device);
+			if (stage) {
+				stage.dataset.device = device;
+				document.querySelectorAll('.sopsr-preview-devices [data-preview-device]').forEach(tab => {
+					tab.classList.toggle('is-active', tab.dataset.previewDevice === device);
+				});
+				updatePreview();
+			}
 		});
 	});
 

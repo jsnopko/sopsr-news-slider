@@ -127,11 +127,12 @@ final class SOPSR_News_Slider_Admin {
 									<?php self::device_card( $device, $label, $s['responsive'][ $device ], $d['responsive'][ $device ] ); ?>
 								<?php endforeach; ?>
 							</div>
-							<?php self::select( 'content_halign', 'Horizontálne zarovnanie obsahu', $s['content_halign'], $d['content_halign'], array( 'left' => 'Vľavo', 'center' => 'Na stred', 'right' => 'Vpravo' ) ); ?>
-							<?php self::select( 'content_valign', 'Vertikálne zarovnanie obsahu', $s['content_valign'], $d['content_valign'], array( 'top' => 'Hore', 'center' => 'Na stred', 'bottom' => 'Dole' ) ); ?>
-							<?php self::number( 'content_max_width', 'Max. šírka textového obsahu', $s['content_max_width'], $d['content_max_width'], 240, 2400, 1, 'px' ); ?>
-							<?php self::number( 'content_padding_x', 'Horizontálny padding obsahu', $s['content_padding_x'], $d['content_padding_x'], 0, 200, 1, 'px' ); ?>
-							<?php self::number( 'content_padding_y', 'Vertikálny padding obsahu', $s['content_padding_y'], $d['content_padding_y'], 0, 200, 1, 'px' ); ?>
+							<?php self::select( 'content_halign', 'Horizontálne zarovnanie obsahu – Desktop', $s['content_halign'], $d['content_halign'], array( 'left' => 'Vľavo', 'center' => 'Na stred', 'right' => 'Vpravo' ) ); ?>
+							<?php self::select( 'content_valign', 'Vertikálne zarovnanie obsahu – Desktop', $s['content_valign'], $d['content_valign'], array( 'top' => 'Hore', 'center' => 'Na stred', 'bottom' => 'Dole' ) ); ?>
+							<?php self::dimension( 'content_max_width', 'Max. šírka textového obsahu – Desktop', $s, $d, 0.01, 2400, 0.01 ); ?>
+							<?php self::dimension( 'content_padding_x', 'Horizontálny padding obsahu – Desktop', $s, $d, 0, 200, 0.01 ); ?>
+							<?php self::dimension( 'content_padding_y', 'Vertikálny padding obsahu – Desktop', $s, $d, 0, 200, 0.01 ); ?>
+							<?php self::responsive_style_cards( 'content', $s, $d ); ?>
 						<?php self::section_close(); ?>
 
 						<?php self::section_open( 'image-overlay', 'Obrázok a overlay', 'WordPress responsive images, object-fit, farba a gradient.' ); ?>
@@ -157,10 +158,12 @@ final class SOPSR_News_Slider_Admin {
 								<?php self::font_size( 'title_tablet', 'Tablet', $s, $d ); ?>
 								<?php self::font_size( 'title_mobile', 'Mobile', $s, $d ); ?>
 							</div>
-							<?php self::select( 'title_weight', 'Font weight', (string) $s['title_weight'], (string) $d['title_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
-							<?php self::number( 'title_line_height', 'Line-height', $s['title_line_height'], $d['title_line_height'], 0.8, 2.5, 0.05 ); ?>
-							<?php self::number( 'title_max_width', 'Max. šírka nadpisu', $s['title_max_width'], $d['title_max_width'], 200, 2000, 1, 'px' ); ?>
-							<?php self::checkbox( 'title_text_shadow', 'Text shadow', $s['title_text_shadow'], $d['title_text_shadow'] ); ?>
+							<?php self::select( 'title_weight', 'Font weight – Desktop', (string) $s['title_weight'], (string) $d['title_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
+							<?php self::number( 'title_line_height', 'Line-height – Desktop', $s['title_line_height'], $d['title_line_height'], 0.8, 2.5, 0.05 ); ?>
+							<?php self::dimension( 'title_max_width', 'Max. šírka nadpisu – Desktop', $s, $d, 0.01, 2000, 0.01 ); ?>
+							<?php self::checkbox( 'title_text_shadow', 'Text shadow – Desktop', $s['title_text_shadow'], $d['title_text_shadow'] ); ?>
+							<?php self::responsive_style_cards( 'title', $s, $d ); ?>
+							<?php self::title_spacing_controls( $s, $d ); ?>
 						<?php self::section_close(); ?>
 
 						<?php self::section_open( 'cta', 'CTA / „Viac informácií“', 'Vzhľad odkazu a WCAG accessible name.' ); ?>
@@ -174,15 +177,16 @@ final class SOPSR_News_Slider_Admin {
 							<?php self::color( 'cta_focus_bg_color', 'Pozadie CTA pri focus', $s['cta_focus_bg_color'], $d['cta_focus_bg_color'] ); ?>
 							<?php self::color( 'cta_border_color', 'Border', $s['cta_border_color'], $d['cta_border_color'] ); ?>
 							<div class="sopsr-inline-fields">
-								<?php self::number_compact( 'cta_border_width', 'Border', $s['cta_border_width'], $d['cta_border_width'], 0, 10, 1, 'px' ); ?>
-								<?php self::number_compact( 'cta_border_radius', 'Radius', $s['cta_border_radius'], $d['cta_border_radius'], 0, 100, 1, 'px' ); ?>
-								<?php self::font_size( 'cta_font_size', 'Font', $s, $d ); ?>
+								<?php self::dimension_compact( 'cta_border_width', 'Border – Desktop', $s, $d, 0, 100, 0.01 ); ?>
+								<?php self::dimension_compact( 'cta_border_radius', 'Radius – Desktop', $s, $d, 0, 200, 0.01 ); ?>
+								<?php self::font_size( 'cta_font_size', 'Font – Desktop', $s, $d ); ?>
 							</div>
-							<?php self::select( 'cta_font_weight', 'Font weight', (string) $s['cta_font_weight'], (string) $d['cta_font_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
+							<?php self::select( 'cta_font_weight', 'Font weight – Desktop', (string) $s['cta_font_weight'], (string) $d['cta_font_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) ); ?>
 							<div class="sopsr-inline-fields">
-								<?php self::number_compact( 'cta_padding_y', 'Padding Y', $s['cta_padding_y'], $d['cta_padding_y'], 0, 60, 1, 'px' ); ?>
-								<?php self::number_compact( 'cta_padding_x', 'Padding X', $s['cta_padding_x'], $d['cta_padding_x'], 0, 100, 1, 'px' ); ?>
+								<?php self::dimension_compact( 'cta_padding_y', 'Padding Y – Desktop', $s, $d, 0, 200, 0.01 ); ?>
+								<?php self::dimension_compact( 'cta_padding_x', 'Padding X – Desktop', $s, $d, 0, 300, 0.01 ); ?>
 							</div>
+							<?php self::responsive_style_cards( 'cta', $s, $d ); ?>
 						<?php self::section_close(); ?>
 
 						<?php self::section_open( 'slider', 'Slider', 'Najpoužívanejšie Splide nastavenia.' ); ?>
@@ -208,7 +212,8 @@ final class SOPSR_News_Slider_Admin {
 							<?php self::color( 'controls_color', 'Farba ikon', $s['controls_color'], $d['controls_color'] ); ?>
 							<?php self::color( 'controls_bg_color', 'Pozadie ovládania', $s['controls_bg_color'], $d['controls_bg_color'] ); ?>
 							<?php self::range( 'controls_bg_opacity', 'Opacity pozadia', $s['controls_bg_opacity'], $d['controls_bg_opacity'], 0, 100, 1, '%' ); ?>
-							<?php self::number( 'controls_size', 'Veľkosť ovládacích tlačidiel', $s['controls_size'], $d['controls_size'], 28, 100, 1, 'px' ); ?>
+							<?php self::dimension( 'controls_size', 'Veľkosť ovládacích tlačidiel – Desktop', $s, $d, 0.01, 200, 0.01 ); ?>
+							<?php self::responsive_style_cards( 'controls', $s, $d ); ?>
 							<?php self::color( 'pagination_active_color', 'Aktívna pagination', $s['pagination_active_color'], $d['pagination_active_color'] ); ?>
 							<?php self::color( 'pagination_color', 'Neaktívna pagination', $s['pagination_color'], $d['pagination_color'] ); ?>
 							<?php self::color( 'focus_color', 'Focus outline', $s['focus_color'], $d['focus_color'] ); ?>
@@ -474,15 +479,33 @@ final class SOPSR_News_Slider_Admin {
 		self::row_close();
 	}
 
-	private static function font_size( string $key, string $label, array $settings, array $defaults ): void {
-		echo '<div class="sopsr-font-field">';
-		self::number_compact( $key, $label, $settings[ $key ], $defaults[ $key ], 0.01, 140, 0.01, '' );
+	private static function dimension( string $key, string $label, array $settings, array $defaults, $min, $max, $step ): void {
+		$id = 'sopsr-' . sanitize_html_class( $key );
+		self::row_open( $label, $id );
+		self::dimension_inputs( $key, '', $settings, $defaults, $min, $max, $step, 'sopsr-dimension-field' );
+		self::row_close();
+	}
+
+	private static function dimension_compact( string $key, string $label, array $settings, array $defaults, $min, $max, $step ): void {
+		self::dimension_inputs( $key, $label, $settings, $defaults, $min, $max, $step, 'sopsr-font-field' );
+	}
+
+	private static function dimension_inputs( string $key, string $label, array $settings, array $defaults, $min, $max, $step, string $class ): void {
+		$id       = 'sopsr-' . sanitize_html_class( str_replace( array( '[', ']' ), '-', $key ) );
 		$unit_key = $key . '_unit';
-		echo '<label class="sopsr-compact-field"><span>' . esc_html( $label . ' – jednotka' ) . '</span><select id="sopsr-' . esc_attr( $unit_key ) . '" name="' . esc_attr( self::field_name( $unit_key ) ) . '" data-default="px">';
+		$unit_id  = 'sopsr-' . sanitize_html_class( str_replace( array( '[', ']' ), '-', $unit_key ) );
+		$label_markup = '' !== $label ? '<span>' . esc_html( $label ) . '</span>' : '';
+		echo '<div class="' . esc_attr( $class ) . '"><label class="sopsr-compact-field" for="' . esc_attr( $id ) . '">' . $label_markup;
+		printf( '<input type="number" id="%1$s" name="%2$s" value="%3$s" min="%4$s" max="%5$s" step="%6$s" data-default="%7$s"></label>', esc_attr( $id ), esc_attr( self::field_name( $key ) ), esc_attr( (string) $settings[ $key ] ), esc_attr( (string) $min ), esc_attr( (string) $max ), esc_attr( (string) $step ), esc_attr( (string) $defaults[ $key ] ) );
+		echo '<label class="sopsr-compact-field" for="' . esc_attr( $unit_id ) . '"><span>Jednotka</span><select id="' . esc_attr( $unit_id ) . '" name="' . esc_attr( self::field_name( $unit_key ) ) . '" data-default="' . esc_attr( (string) ( $defaults[ $unit_key ] ?? 'px' ) ) . '">';
 		foreach ( array( 'px', 'rem', 'em' ) as $unit ) {
 			echo '<option value="' . esc_attr( $unit ) . '" ' . selected( $settings[ $unit_key ] ?? 'px', $unit, false ) . '>' . esc_html( $unit ) . '</option>';
 		}
 		echo '</select></label></div>';
+	}
+
+	private static function font_size( string $key, string $label, array $settings, array $defaults ): void {
+		self::dimension_compact( $key, $label, $settings, $defaults, 0.01, 140, 0.01 );
 	}
 
 	private static function number_compact( string $key, string $label, $value, $default, $min, $max, $step, string $suffix ): void {
@@ -590,6 +613,85 @@ final class SOPSR_News_Slider_Admin {
 		self::nested_select_compact( "responsive[$device][fit]", 'Image fit', $value['fit'], $default['fit'], array( 'cover' => 'cover', 'contain' => 'contain', 'fill' => 'fill', 'none' => 'none', 'scale-down' => 'scale-down' ) );
 		self::nested_number_compact( "responsive[$device][position_x]", 'Object position X', $value['position_x'], $default['position_x'], 0, 100, 1 );
 		self::nested_number_compact( "responsive[$device][position_y]", 'Object position Y', $value['position_y'], $default['position_y'], 0, 100, 1 );
+		echo '</div>';
+	}
+
+	private static function responsive_style_cards( string $type, array $settings, array $defaults ): void {
+		echo '<div class="sopsr-responsive-overrides">';
+		foreach ( array( 'tablet' => 'Tablet', 'mobile' => 'Mobile' ) as $device => $label ) {
+			$value   = $settings['responsive'][ $device ];
+			$default = $defaults['responsive'][ $device ];
+			echo '<div class="sopsr-device-card"><h3>' . esc_html( $label ) . '</h3>';
+			if ( 'content' === $type ) {
+				self::nested_select_compact( "responsive[$device][content_halign]", 'Horizontálne zarovnanie obsahu', $value['content_halign'], $default['content_halign'], array( 'left' => 'Vľavo', 'center' => 'Na stred', 'right' => 'Vpravo' ) );
+				self::nested_select_compact( "responsive[$device][content_valign]", 'Vertikálne zarovnanie obsahu', $value['content_valign'], $default['content_valign'], array( 'top' => 'Hore', 'center' => 'Na stred', 'bottom' => 'Dole' ) );
+				self::nested_dimension_compact( $device, 'content_max_width', 'Max. šírka textového obsahu', $value, $default, 0.01, 2400 );
+				self::nested_dimension_compact( $device, 'content_padding_x', 'Horizontálny padding obsahu', $value, $default, 0, 200 );
+				self::nested_dimension_compact( $device, 'content_padding_y', 'Vertikálny padding obsahu', $value, $default, 0, 200 );
+			} elseif ( 'title' === $type ) {
+				self::nested_select_compact( "responsive[$device][title_weight]", 'Font weight', (string) $value['title_weight'], (string) $default['title_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) );
+				self::nested_number_compact( "responsive[$device][title_line_height]", 'Line-height', $value['title_line_height'], $default['title_line_height'], 0.8, 2.5, 0.05 );
+				self::nested_dimension_compact( $device, 'title_max_width', 'Max. šírka nadpisu', $value, $default, 0.01, 2000 );
+				self::nested_checkbox_compact( "responsive[$device][title_text_shadow]", 'Text shadow', $value['title_text_shadow'], $default['title_text_shadow'] );
+			} elseif ( 'cta' === $type ) {
+				self::nested_dimension_compact( $device, 'cta_border_width', 'Border', $value, $default, 0, 100 );
+				self::nested_dimension_compact( $device, 'cta_border_radius', 'Radius', $value, $default, 0, 200 );
+				self::nested_dimension_compact( $device, 'cta_font_size', 'Font', $value, $default, 0.01, 140 );
+				self::nested_select_compact( "responsive[$device][cta_font_weight]", 'Font weight', (string) $value['cta_font_weight'], (string) $default['cta_font_weight'], array( '300' => '300', '400' => '400', '500' => '500', '600' => '600', '700' => '700', '800' => '800', '900' => '900' ) );
+				self::nested_dimension_compact( $device, 'cta_padding_y', 'Padding Y', $value, $default, 0, 200 );
+				self::nested_dimension_compact( $device, 'cta_padding_x', 'Padding X', $value, $default, 0, 300 );
+			} elseif ( 'controls' === $type ) {
+				self::nested_dimension_compact( $device, 'controls_size', 'Veľkosť ovládacích tlačidiel', $value, $default, 0.01, 200 );
+			}
+			echo '</div>';
+		}
+		echo '</div>';
+	}
+
+	private static function title_spacing_controls( array $settings, array $defaults ): void {
+		echo '<div class="sopsr-title-spacing"><div class="sopsr-title-spacing__tabs" role="group" aria-label="Zariadenie pre rozostupy nadpisu">';
+		foreach ( array( 'desktop' => 'Desktop', 'tablet' => 'Tablet', 'mobile' => 'Mobile' ) as $device => $label ) {
+			printf( '<button type="button" class="sopsr-title-spacing__tab%1$s" data-title-spacing-device="%2$s" aria-controls="sopsr-title-spacing-%2$s" aria-pressed="%3$s">%4$s</button>', 'desktop' === $device ? ' is-active' : '', esc_attr( $device ), 'desktop' === $device ? 'true' : 'false', esc_html( $label ) );
+		}
+		echo '</div>';
+		foreach ( array( 'desktop' => 'Desktop', 'tablet' => 'Tablet', 'mobile' => 'Mobile' ) as $device => $label ) {
+			$value = 'desktop' === $device ? $settings : $settings['responsive'][ $device ];
+			$default = 'desktop' === $device ? $defaults : $defaults['responsive'][ $device ];
+			echo '<div class="sopsr-title-spacing__panel" id="sopsr-title-spacing-' . esc_attr( $device ) . '" data-title-spacing-panel="' . esc_attr( $device ) . '"' . ( 'desktop' === $device ? '' : ' hidden' ) . '>';
+			foreach ( array( 'title_padding' => 'Padding', 'title_margin' => 'Margin' ) as $property => $heading ) {
+				echo '<fieldset class="sopsr-title-spacing__group"><legend>' . esc_html( $heading . ' – ' . $label ) . '</legend><div class="sopsr-title-spacing__sides">';
+				foreach ( array( 'top' => 'Hore', 'right' => 'Vpravo', 'bottom' => 'Dole', 'left' => 'Vľavo' ) as $side => $side_label ) {
+					$key = $property . '_' . $side;
+					$field = 'desktop' === $device ? $key : "responsive[$device][$key]";
+					$unit_field = 'desktop' === $device ? $key . '_unit' : "responsive[$device][{$key}_unit]";
+					$id = 'desktop' === $device ? 'sopsr-' . $key : 'sopsr-title-spacing-' . $device . '-' . $key;
+					echo '<div class="sopsr-title-spacing__side"><label for="' . esc_attr( $id ) . '">' . esc_html( $side_label ) . '</label>';
+					printf( '<input type="number" id="%1$s" name="%2$s" value="%3$s" min="0" max="500" step="0.01" data-default="%4$s">', esc_attr( $id ), esc_attr( self::field_name( $field ) ), esc_attr( (string) $value[ $key ] ), esc_attr( (string) $default[ $key ] ) );
+					$unit_id = $id . '-unit';
+					echo '<label class="screen-reader-text" for="' . esc_attr( $unit_id ) . '">' . esc_html( $side_label . ' – jednotka' ) . '</label><select id="' . esc_attr( $unit_id ) . '" name="' . esc_attr( self::field_name( $unit_field ) ) . '" data-default="' . esc_attr( (string) $default[ $key . '_unit' ] ) . '">';
+					foreach ( array( 'px', 'rem', 'em' ) as $unit ) {
+						echo '<option value="' . esc_attr( $unit ) . '" ' . selected( $value[ $key . '_unit' ], $unit, false ) . '>' . esc_html( $unit ) . '</option>';
+					}
+					echo '</select></div>';
+				}
+				echo '</div></fieldset>';
+			}
+			echo '</div>';
+		}
+		echo '</div>';
+	}
+
+	private static function nested_dimension_compact( string $device, string $key, string $label, array $value, array $default, $min, $max ): void {
+		echo '<div class="sopsr-device-subgrid">';
+		self::nested_number_compact( "responsive[$device][$key]", $label, $value[ $key ], $default[ $key ], $min, $max, 0.01 );
+		self::nested_select_compact( "responsive[$device][{$key}_unit]", 'Jednotka', $value[ $key . '_unit' ], $default[ $key . '_unit' ], array( 'px' => 'px', 'rem' => 'rem', 'em' => 'em' ) );
+		echo '</div>';
+	}
+
+	private static function nested_checkbox_compact( string $key, string $label, $value, $default ): void {
+		$id = 'sopsr-' . sanitize_html_class( str_replace( array( '[', ']' ), '-', $key ) );
+		echo '<div class="sopsr-device-field"><span>' . esc_html( $label ) . '</span>';
+		printf( '<input type="hidden" name="%1$s" value="0"><label class="sopsr-switch"><input type="checkbox" id="%2$s" name="%1$s" value="1" %3$s data-default="%4$s"><span class="sopsr-switch__track"></span></label>', esc_attr( self::field_name( $key ) ), esc_attr( $id ), checked( ! empty( $value ), true, false ), esc_attr( ! empty( $default ) ? '1' : '0' ) );
 		echo '</div>';
 	}
 
