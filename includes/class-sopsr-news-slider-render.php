@@ -248,6 +248,9 @@ final class SOPSR_News_Slider_Render {
 	}
 
 	private static function map_categories( array $ids, string $lang ): array {
+		if ( in_array( 'all', array_map( 'strval', $ids ), true ) ) {
+			return array();
+		}
 		$mapped = array();
 
 		foreach ( array_filter( array_map( 'absint', $ids ) ) as $term_id ) {
@@ -280,12 +283,13 @@ final class SOPSR_News_Slider_Render {
 		if ( $attachment ) {
 			$image_html = self::image_html( $attachment, 0 === $index, $settings, $title, $has_fallback );
 		}
+		$background_only_class = ! $image_html && 'background' === $settings['missing_image_mode'] ? ' sopsr-news-slider__slide--background-only' : '';
 
 		$aria_label = trim( SOPSR_News_Slider_Settings::text( 'cta_prefix', $lang ) . ' ' . wp_strip_all_tags( $title ) );
 
 		ob_start();
 		?>
-		<li class="splide__slide sopsr-news-slider__slide">
+		<li class="splide__slide sopsr-news-slider__slide<?php echo esc_attr( $background_only_class ); ?>">
 			<article class="sopsr-news-slider__slide-inner">
 				<div class="sopsr-news-slider__media"<?php echo $image_html ? '' : ' aria-hidden="true"'; ?>>
 					<?php echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -537,6 +541,7 @@ final class SOPSR_News_Slider_Render {
 		$mobile_rules = self::device_css( $selector, 'mobile', $settings['responsive']['mobile'], ! empty( $settings['full_bleed'] ), $mobile_media );
 		$css           = array_merge( $css, $mobile_rules );
 		$css[]         = self::responsive_style_css( $selector, $settings, 'mobile', $mobile_media );
+		$css[]         = self::background_only_css( $selector, $settings );
 
 		if ( 'responsive' === $settings['title_font_mode'] ) {
 			$css[] = '@media (max-width:' . (int) $settings['tablet_breakpoint'] . 'px){' . $selector . ' .sopsr-news-slider__title{font-size:' . self::font_size( $settings, 'title_tablet' ) . ';}}';
@@ -549,6 +554,16 @@ final class SOPSR_News_Slider_Render {
 		}
 
 		return implode( "\n", $css );
+	}
+
+	private static function background_only_css( string $selector, array $settings ): string {
+		$width_unit = in_array( $settings['background_only_width_unit'] ?? '%', array( '%', 'px', 'vw' ), true ) ? $settings['background_only_width_unit'] : '%';
+		$height_unit = in_array( $settings['background_only_height_unit'] ?? 'px', array( '%', 'px', 'vw' ), true ) ? $settings['background_only_height_unit'] : 'px';
+		$width = self::clean_number( $settings['background_only_width'] ?? 100 ) . $width_unit;
+		$height = self::clean_number( $settings['background_only_height'] ?? 620 ) . $height_unit;
+		$slide = $selector . ' .sopsr-news-slider__slide--background-only';
+		return $slide . '{display:flex;justify-content:center;}'
+			. $slide . ' .sopsr-news-slider__slide-inner{width:' . $width . ';max-width:100%;height:' . $height . ';min-height:1px;aspect-ratio:auto;flex:0 0 auto;}';
 	}
 
 	private static function device_css( string $selector, string $device, array $device_settings, bool $full_bleed, string $media_start ): array {

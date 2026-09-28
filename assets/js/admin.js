@@ -100,6 +100,37 @@
 		return document.getElementById('sopsr-' + key);
 	}
 
+	const missingImageMode = byId('missing_image_mode');
+	const backgroundOnlySize = document.getElementById('sopsr-background-only-size');
+	function updateBackgroundOnlyFields() {
+		if (backgroundOnlySize && missingImageMode) {
+			backgroundOnlySize.hidden = missingImageMode.value !== 'background';
+		}
+	}
+	missingImageMode?.addEventListener('change', updateBackgroundOnlyFields);
+	updateBackgroundOnlyFields();
+
+	const includeCategories = byId('include_categories');
+	if (includeCategories) {
+		let previousSelection = new Set(Array.from(includeCategories.selectedOptions, option => option.value));
+		includeCategories.addEventListener('change', () => {
+			const selectedOptions = Array.from(includeCategories.selectedOptions);
+			const selectedValues = new Set(selectedOptions.map(option => option.value));
+			const newlySelected = Array.from(selectedValues).filter(value => !previousSelection.has(value));
+			const allOption = Array.from(includeCategories.options).find(option => option.value === 'all');
+			if (allOption) {
+				if (newlySelected.includes('all')) {
+					Array.from(includeCategories.options).forEach(option => { option.selected = option.value === 'all'; });
+				} else if (selectedOptions.some(option => option.value !== 'all')) {
+					allOption.selected = false;
+				} else {
+					allOption.selected = true;
+				}
+				previousSelection = new Set(Array.from(includeCategories.selectedOptions, option => option.value));
+			}
+		});
+	}
+
 	function nested(path) {
 		const name = 'sopsr_news_slider_settings' + path.map(part => '[' + part + ']').join('');
 		return form.querySelector('[name="' + CSS.escape(name) + '"]');

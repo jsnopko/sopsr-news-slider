@@ -1,6 +1,6 @@
 # ŠOP SR News Slider – návrh a základná dokumentácia
 
-**Stav:** implementovaný test build 0.1.6
+**Stav:** implementovaný test build 0.1.8
 **Projekt:** www.sopsr.sk / WordPress + Kadence + Polylang  
 **Knižnica:** Splide.js 4.1.4; plugin podporuje bundled/local cache a CDN fallback  
 **Licencia Splide:** MIT  
@@ -540,3 +540,13 @@ Hlavný nadpis má samostatný all-side padding a margin pre Desktop, Tablet aj 
 ## Implementačná poznámka pre verziu 0.1.6
 
 Sekcia Nadpis používa pre padding a margin štyri samostatné strany (hore, vpravo, dole, vľavo) a prepínač Desktop/Tablet/Mobile. Každá strana má číselnú hodnotu a jednotku `px`, `rem` alebo `em`. Prepnutie zariadenia zobrazí príslušné polia a prepne Live Preview. Pri starších uložených nastaveniach sa pôvodná spoločná hodnota a jednotka prenesú na všetky štyri strany príslušného zariadenia; nové nastavenia začínajú na `0px`. Ostatné sekcie používajú pôvodné ovládanie.
+
+
+## Implementačná poznámka pre verziu 0.1.7
+
+Výber zahrnutých kategórií má navrchu explicitnú voľbu „Všetky kategórie“. Voľba je uložená ako osobitná hodnota `all`; pri tvorbe WordPress dotazu sa vyhodnotí ako neprítomný category filter. Jedna alebo viac zvolených ID kategórií naďalej obmedzí výsledky na tieto kategórie. Staršie prázdne zoznamy sa naďalej zobrazujú aj správajú ako výber všetkých kategórií.
+
+
+## Implementačná poznámka pre verziu 0.1.8
+
+Pri režime „Farebné pozadie bez obrázka“ sa pod voľbou režimu zobrazí nastavenie šírky a výšky. Predvolená šírka je `100%`, predvolená výška `620px`; obe hodnoty podporujú jednotky `%`, `px` a `vw`. Frontend aplikuje tieto rozmery iba na slide, na ktorom sa obrázok nepodarilo vyrenderovať. Slidy s obrázkom naďalej používajú nastavenia rozmerov Desktop/Tablet/Mobile.

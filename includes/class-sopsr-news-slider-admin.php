@@ -106,10 +106,14 @@ final class SOPSR_News_Slider_Admin {
 
 						<?php self::section_open( 'content', 'Obsah', 'Výber článkov a obsah slidu.' ); ?>
 							<?php self::number( 'post_count', 'Počet aktualít', $s['post_count'], $d['post_count'], 1, 30, 1, 'Maximálny počet slidov.' ); ?>
-							<?php self::category_multiselect( 'include_categories', 'Zahrnúť iba kategórie', $s['include_categories'], $d['include_categories'], $categories, 'Prázdne = všetky kategórie.' ); ?>
+							<?php self::category_multiselect( 'include_categories', 'Zahrnúť iba kategórie', $s['include_categories'], $d['include_categories'], $categories, 'Vyberte všetky kategórie alebo jednu či viac konkrétnych kategórií.' ); ?>
 							<?php self::category_multiselect( 'exclude_categories', 'Vylúčené kategórie', $s['exclude_categories'], $d['exclude_categories'], $categories, 'Môžete označiť viac kategórií. Polylang preklady termov sa mapujú automaticky.' ); ?>
 							<?php self::text( 'pinned_post_ids', 'Pripnuté ID článkov', implode( ',', (array) $s['pinned_post_ids'] ), '', 'Napr. 123,456. Zobrazia sa ako prvé a zvyšok doplnia najnovšie články.' ); ?>
 							<?php self::select( 'missing_image_mode', 'Ak chýba featured image', $s['missing_image_mode'], $d['missing_image_mode'], array( 'skip' => 'Preskočiť článok', 'fallback' => 'Použiť fallback obrázok', 'background' => 'Farebné pozadie bez obrázka' ) ); ?>
+							<div id="sopsr-background-only-size"<?php echo 'background' === $s['missing_image_mode'] ? '' : ' hidden'; ?>>
+								<?php self::slider_size_dimension( 'background_only_width', 'Šírka pozadia bez obrázka', $s, $d, 1, 3000 ); ?>
+								<?php self::slider_size_dimension( 'background_only_height', 'Výška pozadia bez obrázka', $s, $d, 1, 3000 ); ?>
+							</div>
 							<?php self::media_field( 'fallback_image_id', 'Fallback obrázok', (int) $s['fallback_image_id'], (int) $d['fallback_image_id'] ); ?>
 							<?php self::checkbox( 'show_date', 'Zobraziť dátum', $s['show_date'], $d['show_date'] ); ?>
 							<?php self::checkbox( 'show_excerpt', 'Zobraziť excerpt', $s['show_excerpt'], $d['show_excerpt'] ); ?>
@@ -486,6 +490,20 @@ final class SOPSR_News_Slider_Admin {
 		self::row_close();
 	}
 
+	private static function slider_size_dimension( string $key, string $label, array $settings, array $defaults, $min, $max ): void {
+		$id = 'sopsr-' . sanitize_html_class( $key );
+		self::row_open( $label, $id );
+		printf( '<div class="sopsr-dimension-field"><label class="sopsr-compact-field" for="%1$s"><span>Hodnota</span><input type="number" id="%1$s" name="%2$s" value="%3$s" min="%4$s" max="%5$s" step="0.1" data-default="%6$s"></label>', esc_attr( $id ), esc_attr( self::field_name( $key ) ), esc_attr( (string) $settings[ $key ] ), esc_attr( (string) $min ), esc_attr( (string) $max ), esc_attr( (string) $defaults[ $key ] ) );
+		$unit_key = $key . '_unit';
+		$unit_id = 'sopsr-' . sanitize_html_class( $unit_key );
+		echo '<label class="sopsr-compact-field" for="' . esc_attr( $unit_id ) . '"><span>Jednotka</span><select id="' . esc_attr( $unit_id ) . '" name="' . esc_attr( self::field_name( $unit_key ) ) . '" data-default="' . esc_attr( (string) $defaults[ $unit_key ] ) . '">';
+		foreach ( array( '%', 'px', 'vw' ) as $unit ) {
+			echo '<option value="' . esc_attr( $unit ) . '" ' . selected( $settings[ $unit_key ], $unit, false ) . '>' . esc_html( $unit ) . '</option>';
+		}
+		echo '</select></label></div>';
+		self::row_close();
+	}
+
 	private static function dimension_compact( string $key, string $label, array $settings, array $defaults, $min, $max, $step ): void {
 		self::dimension_inputs( $key, $label, $settings, $defaults, $min, $max, $step, 'sopsr-font-field' );
 	}
@@ -575,6 +593,10 @@ final class SOPSR_News_Slider_Admin {
 		$id = 'sopsr-' . sanitize_html_class( $key );
 		self::row_open( $label, $id, $help );
 		echo '<select multiple size="8" class="sopsr-multiselect" id="' . esc_attr( $id ) . '" name="' . esc_attr( self::field_name( $key ) ) . '[]" data-default="' . esc_attr( wp_json_encode( array_values( $defaults ) ) ) . '">';
+		if ( 'include_categories' === $key ) {
+			$select_all = empty( $selected_values ) || in_array( 'all', array_map( 'strval', $selected_values ), true );
+			echo '<option value="all" ' . selected( $select_all, true, false ) . '>Všetky kategórie</option>';
+		}
 		foreach ( $categories as $category ) {
 			printf( '<option value="%1$d" %2$s>%3$s (#%1$d)</option>', (int) $category->term_id, selected( in_array( (int) $category->term_id, array_map( 'intval', $selected_values ), true ), true, false ), esc_html( $category->name ) );
 		}

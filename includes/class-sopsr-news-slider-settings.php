@@ -26,10 +26,14 @@ final class SOPSR_News_Slider_Settings {
 	public static function defaults(): array {
 		$defaults = array(
 			'post_count'              => 5,
-			'include_categories'      => array(),
+			'include_categories'      => array( 'all' ),
 			'exclude_categories'      => array(),
 			'pinned_post_ids'         => array(),
 			'missing_image_mode'      => 'skip',
+			'background_only_width'   => 100,
+			'background_only_width_unit' => '%',
+			'background_only_height'  => 620,
+			'background_only_height_unit' => 'px',
 			'fallback_image_id'       => 0,
 			'image_size'              => 'full',
 			'image_alt_mode'          => 'media',
@@ -513,11 +517,15 @@ final class SOPSR_News_Slider_Settings {
 		$out['fallback_image_id']   = absint( $input['fallback_image_id'] ?? 0 );
 		$out['image_size']          = sanitize_key( $input['image_size'] ?? $defaults['image_size'] );
 		$out['missing_image_mode']  = self::enum( $input, 'missing_image_mode', array( 'skip', 'fallback', 'background' ), $defaults['missing_image_mode'] );
+		$out['background_only_width'] = self::float_range_input( $input, 'background_only_width', 1, 3000, $defaults['background_only_width'] );
+		$out['background_only_width_unit'] = self::enum( $input, 'background_only_width_unit', array( '%', 'px', 'vw' ), $defaults['background_only_width_unit'] );
+		$out['background_only_height'] = self::float_range_input( $input, 'background_only_height', 1, 3000, $defaults['background_only_height'] );
+		$out['background_only_height_unit'] = self::enum( $input, 'background_only_height_unit', array( '%', 'px', 'vw' ), $defaults['background_only_height_unit'] );
 		$out['image_alt_mode']      = self::enum( $input, 'image_alt_mode', array( 'media', 'decorative' ), $defaults['image_alt_mode'] );
 		$out['lazy_mode']           = self::enum( $input, 'lazy_mode', array( 'native', 'off', 'splide-nearby', 'splide-sequential' ), $defaults['lazy_mode'] );
 		$out['heading_level']       = self::enum( $input, 'heading_level', array( 'h2', 'h3', 'h4' ), $defaults['heading_level'] );
 
-		$out['include_categories']  = self::sanitize_id_array( $input['include_categories'] ?? array() );
+		$out['include_categories']  = self::sanitize_include_categories( $input['include_categories'] ?? array() );
 		$out['exclude_categories']  = self::sanitize_id_array( $input['exclude_categories'] ?? array() );
 		$out['pinned_post_ids']     = self::sanitize_id_array( $input['pinned_post_ids'] ?? array() );
 
@@ -758,6 +766,17 @@ final class SOPSR_News_Slider_Settings {
 		$value = is_array( $value ) ? $value : array();
 		$value = array_values( array_unique( array_filter( array_map( 'absint', $value ) ) ) );
 		return $value;
+	}
+
+	private static function sanitize_include_categories( $value ): array {
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
+		if ( in_array( 'all', array_map( 'strval', $value ), true ) || empty( $value ) ) {
+			return array( 'all' );
+		}
+		$ids = self::sanitize_id_array( $value );
+		return empty( $ids ) ? array( 'all' ) : $ids;
 	}
 
 	private static function int_range( array $input, string $key, int $min, int $max, int $default ): int {

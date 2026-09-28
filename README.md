@@ -189,6 +189,18 @@ docs/
 Developer checks (no additional dependencies): `php tests/regression.php` and `node tests/preview.cjs`.
 These cover settings/CSS generation and preview updates; browser and WordPress integration still require the keyboard/manual checks above.
 
+### 0.1.8
+
+- Added configurable width and height for slides without an image when “Farebné pozadie bez obrázka” is selected.
+- The controls appear only for that mode. Width defaults to `100%`; both dimensions accept `%`, `px` and `vw`.
+- The configured size is applied only to slides that actually have no rendered image.
+
+### 0.1.7
+
+- Added an explicit **Všetky kategórie** option at the top of the included categories selector.
+- Selecting it includes posts from every category; selecting one or more categories filters to those choices.
+- Existing empty category selections continue to mean all categories and display the explicit option as selected.
+
 ### 0.1.6
 
 - In Nadpis, padding and margin now have separate Top, Right, Bottom and Left values for Desktop, Tablet and Mobile, each with a `px`, `rem` or `em` selector.
